@@ -11,6 +11,6 @@ namespace GarageOvningUML.Vehicles
         string RegistrationNr { get; set; }
         Colors Color { get; set; }
         int WheelsNr { get; set; }
-        double Weight { get; set; }
+        int Weight { get; set; }
     }
 }

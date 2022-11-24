@@ -14,5 +14,8 @@ namespace GarageOvningUML.Vehicles
             SeatsNr = seats;
         }
 
+        public Bus()
+        {
+        }
     }
 }

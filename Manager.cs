@@ -13,7 +13,7 @@ namespace GarageOvningUML
 
         public Manager()
         {
-            handler = new Handler();
+            handler = new Handler(20); //garage slots - make dynamic
             ui = new ConsoleUI();
         }
 

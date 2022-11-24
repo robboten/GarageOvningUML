@@ -6,7 +6,7 @@ namespace GarageOvningUML.Vehicles
     {
         public Car()
         {
-            throw new NotImplementedException();
+            
         }
 
         public Car(string regNr, Colors color, int weight, int engNr, int wheels) : base(regNr, color, weight, wheels)
@@ -15,11 +15,6 @@ namespace GarageOvningUML.Vehicles
         }
 
         public int EnginesNr
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        {    get;  set; }
     }
 }

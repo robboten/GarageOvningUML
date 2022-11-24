@@ -22,7 +22,7 @@ namespace GarageOvningUML.Vehicles
 
         public string RegistrationNr { get; set; }
         public int WheelsNr { get; set; }
-        public double Weight { get; set; }
+        public int Weight { get; set; }
         public Colors Color { get; set; }
     }
 }
