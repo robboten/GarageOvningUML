@@ -4,20 +4,17 @@ using System.Collections.Generic;
 
 namespace GarageOvningUML.Garage
 {
-    public class GarageHandler : IHandler
+    public class Handler : IHandler
     {
-        //public Garage<Vehicle> Garage1;
         public GenericGarage<Vehicle> GenGarage;
-        public GarageHandler()
+        public Handler()
         {
-           // Garage1 = new(6); //make this dynamic
             GenGarage = new GenericGarage<Vehicle>(12);
         }
 
         public void AddVehicle(Vehicle v)
         {
             //get return for successful adding..
-            //Garage1.Add(v);
             if (GenGarage.Add(v))
                 Console.WriteLine($"Succesfully added {v.RegistrationNr}");
         }
@@ -36,11 +33,6 @@ namespace GarageOvningUML.Garage
             {
                 Console.WriteLine(v.RegistrationNr);
             }
-
-            //foreach (Vehicle v in Garage1)
-            //{
-            //    Console.WriteLine(v.RegistrationNr);
-            //}
         }
 
         public void ListByType()
@@ -49,11 +41,6 @@ namespace GarageOvningUML.Garage
 
             //nr of types
             Console.WriteLine(GenGarage.GetArr().Select(x => x.GetType()).Distinct().Count());
-
-            //foreach (Vehicle v in Garage1)
-            //{
-            //    Console.WriteLine(v.RegistrationNr);
-            //}
         }
 
         public void Search()

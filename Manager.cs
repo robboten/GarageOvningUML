@@ -13,7 +13,7 @@ namespace GarageOvningUML
 
         public Manager()
         {
-            handler = new GarageHandler();
+            handler = new Handler();
             ui = new ConsoleUI();
         }
 
