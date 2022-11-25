@@ -34,5 +34,11 @@ namespace GarageOvningUML.UI
             Console.Clear();
             //Console.SetCursorPosition(0, 0);
         }
+
+        public void Wait()
+        {
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey(true);
+        }
     }
 }

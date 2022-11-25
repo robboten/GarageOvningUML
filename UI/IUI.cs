@@ -11,5 +11,6 @@ namespace GarageOvningUML.UI
         void Message(string message);
         void Clear();
         char InputChar();
+        void Wait();
     }
 }

@@ -14,7 +14,7 @@ namespace GarageOvningUML.Garage
         void RemoveVehicle(Vehicle v);
 
         /// <remarks>regnr + all properties in combination</remarks>
-        void Search();
+        void Search(string sStr);
         public void Seeder();
     }
 }

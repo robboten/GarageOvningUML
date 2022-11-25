@@ -17,8 +17,8 @@ namespace GarageOvningUML
             ui.Message("Welcome to the garage!\n");
 
             //not good in the constructor, but how else to set the handler before exiting it?
-            var s=MakeGarage();
-            handler = new Handler(s); 
+
+            handler = new Handler(ui); 
         }
 
         public void Init()
@@ -34,7 +34,7 @@ namespace GarageOvningUML
         {
             while (true)
             {
-                //ui.Clear() ;
+                ui.Clear() ;
                 ui.Message("Press one of following:\n");
                 ui.Message(
                     "List all parked vehicles: l\n" +
@@ -74,31 +74,21 @@ namespace GarageOvningUML
             }
         }
 
-        public int MakeGarage()
-        {
-            //Break this out
-            //Sätta en kapacitet(antal parkeringsplatser) vid instansieringen av ett nytt garage
-            ui.Message("Setting up a new garage...\n");
-
-            while (true)
-            {
-                ui.Message("How many parking slots would you like?\n");
-                var str = ui.InputLong();
-                if (int.TryParse(str, out int o))
-                {
-                    return o;
-                }
-            }
-        }
 
         public void Search() {
+            ui.Clear();
+            //while true loop
+
+            ui.Message($"Input registration number to search for: ");
+            var sStr = ui.InputLong();
+            handler.Search( sStr );
+
             //● Hitta ett specifikt fordon via registreringsnumret. Det ska gå fungera med både ABC123 samt Abc123 eller AbC123.
             //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från basklassen Vehicle). Exempelvis:
             //○ Alla svarta fordon med fyra hjul.
             //○ Alla motorcyklar som är rosa och har 3 hjul.
             //○ Alla lastbilar
             //○ Alla röda fordon
-            handler.Search(); 
         }
 
 

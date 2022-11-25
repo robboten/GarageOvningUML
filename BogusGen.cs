@@ -7,10 +7,11 @@ namespace GarageOvningUML
 {
     public class BogusGen
     {
-        public BogusGen()
+        private int n;
+        public BogusGen(int nr)
         {
+            n = nr;
             //var types = new string[] { "Car", "Bus" };
-            
         }
 
         public List<Bus> BogusBusGenerator()
@@ -18,7 +19,7 @@ namespace GarageOvningUML
             var Busfaker = new Faker<Bus>();
             ApplyBusRules(Busfaker);
 
-            var busses = Busfaker.Generate(5);
+            var busses = Busfaker.Generate(n/2);
 
             //Console.WriteLine(JsonConvert.SerializeObject(busses, Newtonsoft.Json.Formatting.Indented));
 
@@ -31,7 +32,7 @@ namespace GarageOvningUML
             ApplyCarRules(Carfaker);
             //ApplyVehicleRules(Carfaker);
 
-            var cars = Carfaker.Generate(5);
+            var cars = Carfaker.Generate(n/2);
 
             //Console.WriteLine(JsonConvert.SerializeObject(cars, Newtonsoft.Json.Formatting.Indented));
 
@@ -52,7 +53,11 @@ namespace GarageOvningUML
         where Vehicle : Car
         {
             return faker
-               .RuleFor(u => u.EnginesNr, f => f.Random.Int(1, 8));
+               .RuleFor(u => u.EnginesNr, f => f.Random.Int(1, 8))
+                .RuleFor(u => u.RegistrationNr, f => f.Random.Replace("???###"))
+                .RuleFor(u => u.Color, f => f.PickRandom<Colors>())
+                .RuleFor(u => u.WheelsNr, f => f.Random.Even(4, 8))
+                .RuleFor(u => u.Weight, f => f.Random.Int(1000, 20000));
         }
 
         //public static Faker<T> ApplyVehicleRules<T>(this Faker<T> faker) where T : class, IVehicle
