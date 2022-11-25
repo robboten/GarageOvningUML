@@ -5,10 +5,11 @@ namespace GarageOvningUML.Garage
 {
     public class Handler : IHandler
     {
-        public GenericGarage<Vehicle> GenGarage;
+        public GenericGarage<Vehicle> GenGarage; //nullable good here, I don't want it set before init
         public Handler(int garageSlots)
         {
             GenGarage = new GenericGarage<Vehicle>(garageSlots);
+            Console.WriteLine("Garage setup");
         }
 
         public void AddVehicle(Vehicle v)
@@ -37,7 +38,7 @@ namespace GarageOvningUML.Garage
         {
             foreach (var v in GenGarage)
             {
-                Console.WriteLine(v.RegistrationNr);
+                Console.WriteLine($"{v.RegistrationNr} {v.Color} {v.WheelsNr} {v.Weight}");
             }
         }
 

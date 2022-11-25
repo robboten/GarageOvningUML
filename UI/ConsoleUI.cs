@@ -31,6 +31,7 @@ namespace GarageOvningUML.UI
         public void Clear()
         {
             Console.CursorVisible = false;
+            Console.Clear();
             //Console.SetCursorPosition(0, 0);
         }
     }

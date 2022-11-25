@@ -8,18 +8,16 @@ namespace GarageOvningUML.Vehicles
 {
     public class Airplane : Vehicle
     {
-        public Airplane()
+        public Airplane(string regNr, Colors color, int weight, FuelTypes fuelType, int wheels) : base(regNr, color, weight, wheels)
         {
-            throw new NotImplementedException();
+            FuelType = fuelType;
         }
 
 
-        public FuelTypes FuelTypes
+        public FuelTypes FuelType
         {
-            get => default;
-            set
-            {
-            }
+            get;
+            set;
         }
     }
 }

@@ -2,8 +2,6 @@
 
 using GarageOvningUML;
 
-Console.WriteLine("Hello, Garage!");
-
 var man = new Manager();
 
 man.Init();
