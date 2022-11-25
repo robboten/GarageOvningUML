@@ -1,8 +1,7 @@
-﻿using static System.Net.WebRequestMethods;
-using System.Security.Cryptography;
-using System;
+﻿using GarageOvningUML.Garage;
 using GarageOvningUML.UI;
-using GarageOvningUML.Garage;
+using static GarageOvningUML.UI.Utils;
+using System.Text.RegularExpressions;
 
 namespace GarageOvningUML
 {
@@ -17,80 +16,90 @@ namespace GarageOvningUML
             ui.Message("Welcome to the garage!\n");
 
             //not good in the constructor, but how else to set the handler before exiting it?
-
-            handler = new Handler(ui); 
+            handler = new Handler(ui);
         }
 
         public void Init()
         {
-            //set up some test vehicles
-            //handler.Seeder();
-
-            ui.Clear();
             MainLoop();
         }
 
         private void MainLoop()
         {
+            RenderMenu();
+        }
+
+        private void RenderMenu()
+        {
             while (true)
             {
-                ui.Clear() ;
-                ui.Message("Press one of following:\n");
-                ui.Message(
-                    "List all parked vehicles: l\n" +
-                    "List the types of vehicles parked: t\n" +
-                    "Add vehicle: +\n" +
-                    "Remove vehicle: -\n" +
-                    "Randomize vehicles in garage: r\n" +
-                    "Search for vehicle: s\n");
+                ui.Clear();
+                ui.Message("Press one of following:\n" +
+                    $"{MenuHelpers.Add} : Add vehicle \n" +
+                    $"{MenuHelpers.Remove} : Remove vehicle \n" +
+                    $"{MenuHelpers.List} : List all parked vehicles\n" +
+                    $"{MenuHelpers.ListType} : List the types of vehicles parked\n" +
+                    $"{MenuHelpers.Search} : Search for vehicle by registration number\n" +
+                    $"{MenuHelpers.SearchProp} : Search for vehicle by properties\n" +
+                    $"{MenuHelpers.Seed} : Randomize vehicles in garage\n" +
+                    $"{MenuHelpers.Quit} : Quit");
+
+
                 switch (ui.InputChar())
                 {
-                    //Lista samtliga parkerade fordon
-                    case 'l':
-                        handler.ListAll();
-                        break;
-                    //Lista fordonstyper och hur många av varje som står i garaget
-                    case 't':
-                        handler.ListByType();
-                        break;
-                    //Lägga till fordon
-                    case '+':
-                        //Add();
-                        break;
-                    //ta bort fordon
-                    case '-':
-                        //Remove();
-                        break;
-                    //Möjlighet att populera garaget med ett antal fordon från start.
-                    case 'r':
-                        handler.Seeder(); //arbitrary numbers?
-                        break;
-                    case 's':
-                        Search();
-                        break;
-                    default: break;
+                    case MenuHelpers.Quit: ui.Message("\nquitting..."); return;
+                    case MenuHelpers.Add: Add(); break; //Lägga till fordon
+                    case MenuHelpers.Remove: Remove(); break; //ta bort fordon
+                    case MenuHelpers.List: handler.ListAll(); break; //Lista samtliga parkerade fordon
+                    case MenuHelpers.ListType: handler.ListByType(); break; //Lista fordonstyper och hur många av varje som står i garaget
+                    case MenuHelpers.Seed: handler.Seeder(); break; //Möjlighet att populera garaget med ett antal fordon från start.
+                    case MenuHelpers.Search: Search(); break;
+                    case MenuHelpers.SearchProp: SearchByProp(); break;
+                    default: ui.Message("\nEnter a valid command"); break;
                 }
-
             }
         }
 
-
-        public void Search() {
+        public void Add()
+        {
+            
             ui.Clear();
-            //while true loop
 
-            ui.Message($"Input registration number to search for: ");
-            var sStr = ui.InputLong();
-            handler.Search( sStr );
+            var type = ui.InputLoop($"Type of vehicle : ");
 
-            //● Hitta ett specifikt fordon via registreringsnumret. Det ska gå fungera med både ABC123 samt Abc123 eller AbC123.
-            //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från basklassen Vehicle). Exempelvis:
-            //○ Alla svarta fordon med fyra hjul.
-            //○ Alla motorcyklar som är rosa och har 3 hjul.
-            //○ Alla lastbilar
-            //○ Alla röda fordon
+            ui.Message("Please input the following: \n");
+            var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): "); //validation for serial nr needed
+            var color = ui.InputLoop($"color: ");
+            var weigth = ui.InputLoopInt($"Weigth (kg): ");
+            var wheels = ui.InputLoopInt($"Number of wheels: ");
+
+            //handler.Search(sStr);
         }
 
+        public void Remove()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        //Hitta ett specifikt fordon via registreringsnumret. Det ska gå fungera med både ABC123 samt Abc123 eller AbC123.
+        public void Search()
+        {
+            ui.Clear();
+
+            var sStr = ui.InputLoop($"Input registration number to search for: ");
+            handler.Search(sStr);
+        }
+
+
+        //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från basklassen Vehicle). Exempelvis:
+        //○ Alla svarta fordon med fyra hjul.
+        //○ Alla motorcyklar som är rosa och har 3 hjul.
+        //○ Alla lastbilar
+        //○ Alla röda fordon
+        public void SearchByProp()
+        {
+            throw new System.NotImplementedException();
+        }
 
     }
 }

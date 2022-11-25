@@ -7,38 +7,24 @@ var man = new Manager();
 man.Init();
 
 
-///
-/// I mer programmerings vänliga termer skall vi alltså som minimum ha:
 
-//● Ett användargränssnitt som låter oss använda funktionaliteten hos garaget.Här
-//sker all interaktion med användaren.
 
 //● Vi programmerar inte direkt mot konkreta typer så vi använder oss av Interfaces
 //för det tex IUI, IHandler, IVehicle. (Tips är att bryta ut till interface när
 //implementationen är klar om man tycker den här delen är svår
-///
-
 
 //class Vehicle
 
 //Kravspecifikation
-//Fordonen ska implementeras som klassen Vehicle och subklasser till den.
-//● Vehicle innehåller samtliga egenskaper som ska finnas i samtliga fordonstyper.
-//registreringsnummer, färg, antal hjul och andra egenskaper ni kan komma på.
 //● Registreringsnumret är unikt
-
-
 
 
 //Funktionalitet
 //Det ska gå att:
-//● Lista samtliga parkerade fordon
-//● Lista fordonstyper och hur många av varje som står i garaget
 //● Lägga till och ta bort fordon ur garaget
-//● Sätta en kapacitet (antal parkeringsplatser) vid instansieringen av ett nytt garage
+
 //● Möjlighet att populera garaget med ett antal fordon från start.
-//● Hitta ett specifikt fordon via registreringsnumret. Det ska gå fungera med både
-//ABC123 samt Abc123 eller AbC123.
+
 //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från
 //basklassen Vehicle). Exempelvis:
 //○ Alla svarta fordon med fyra hjul.

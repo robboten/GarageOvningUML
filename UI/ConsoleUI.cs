@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace GarageOvningUML.UI
 {
@@ -13,10 +14,6 @@ namespace GarageOvningUML.UI
             Clear();
         }
 
-        public string InputLong()
-        {
-            return Console.ReadLine();
-        }
 
         public char InputChar()
         {
@@ -39,6 +36,52 @@ namespace GarageOvningUML.UI
         {
             Console.WriteLine("Press any key to continue");
             Console.ReadKey(true);
+        }
+
+        public string InputLong()
+        {
+            return Console.ReadLine();
+        }
+
+        public string InputLoop(string message)
+        {
+            Message(message);
+            var input = Console.ReadLine();
+
+            while (string.IsNullOrEmpty(input))
+            {
+                Message("\n"+message);
+                input = Console.ReadLine();
+            }
+
+            return input;
+        }
+
+        public int InputLoopInt(string message)
+        {
+            Message(message);
+            var str = InputLong();
+            int o;
+
+            while (!int.TryParse(str, out o))
+            {
+                Message("\n"+message);
+                str = InputLong();
+            }
+            return o;
+        }
+
+        public string RegNrValidation(string message)
+        {
+            Message(message);
+            var regNr = InputLong();
+
+            while (!Regex.IsMatch(regNr, @"\[A-Z]{3}\d{3}", RegexOptions.IgnoreCase));
+            {
+                Message("\n" + message);
+                regNr = InputLong();
+            }
+            return regNr;
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.RegularExpressions;
+using Bogus.DataSets;
 using GarageOvningUML.Enums;
 
 namespace GarageOvningUML.Vehicles
@@ -15,14 +17,31 @@ namespace GarageOvningUML.Vehicles
         protected Vehicle(string RegNr, Colors color, int weight, int wheelsNr = 4)
         {
             Color = color;
-            RegistrationNr = RegNr;
+            registrationNr = RegNr;
             Weight = weight;
             WheelsNr = wheelsNr;
         }
 
-        public string RegistrationNr { get; set; }
-        public int WheelsNr { get; set; }
-        public int Weight { get; set; }
-        public Colors Color { get; set; }
+        private string registrationNr;
+        public string RegistrationNr { 
+            get => registrationNr;
+            set
+            {
+                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                registrationNr = value;
+            }
+        }
+        public int WheelsNr { 
+            get; 
+            set; 
+        }
+        public int Weight { 
+            get; 
+            set; 
+        }
+        public Colors Color { 
+            get; 
+            set; 
+        }
     }
 }

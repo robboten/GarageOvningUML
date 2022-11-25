@@ -12,5 +12,9 @@ namespace GarageOvningUML.UI
         void Clear();
         char InputChar();
         void Wait();
+        string InputLoop(string message);
+        int InputLoopInt(string message);
+
+        string RegNrValidation(string message);
     }
 }

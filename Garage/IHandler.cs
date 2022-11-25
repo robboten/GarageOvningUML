@@ -8,7 +8,7 @@ namespace GarageOvningUML.Garage
 {
     public interface IHandler
     {
-        void AddVehicle(Vehicle v);
+        void AddVehicle(Vehicle v, bool verbose);
         void ListAll();
         void ListByType();
         void RemoveVehicle(Vehicle v);
@@ -16,5 +16,6 @@ namespace GarageOvningUML.Garage
         /// <remarks>regnr + all properties in combination</remarks>
         void Search(string sStr);
         public void Seeder();
+        void AddVehicleByString(string sStr, bool verbose);
     }
 }
