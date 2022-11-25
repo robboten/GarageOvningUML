@@ -66,30 +66,6 @@ namespace GarageOvningUML.Garage
                 AddVehicle(v);
             }
 
-            //Bus[] busses =
-            //{
-            //        new("gex466",Colors.White, 8000, 40, 4),
-            //        new("xee446",Colors.Pink, 9000, 60, 6),
-            //        new("gec476",Colors.Silver, 8000, 40,4),
-            //        new("fcc466",Colors.Brown, 12000, 80, 6),
-            //        new("gge477",Colors.Purple, 8000, 40, 4),
-            //        new("bnr543",Colors.White, 18000, 180, 10)
-            //};
-
-            //foreach (var v in busses)
-            //{
-            //    AddVehicle(v);
-            //}
-
-            //Car[] cars =
-            //{
-            //        new("bax566",Colors.Yellow, 8000, 4, 4),
-            //        new("bae546",Colors.Black, 9000, 6, 4),
-            //        new("bac576",Colors.Blue, 8000, 4,4),
-            //        new("bac566",Colors.Green, 12000, 2, 4),
-            //        new("bae577",Colors.Purple, 8000, 1, 4),
-            //        new("bar543",Colors.White, 18000, 1, 4)
-            //    };
             foreach (var v in cars)
             {
                 AddVehicle(v);
