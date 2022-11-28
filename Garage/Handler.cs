@@ -1,8 +1,6 @@
 ﻿using GarageOvningUML.UI;
 using GarageOvningUML.Vehicles;
 using System.Reflection;
-using System.Xml.Linq;
-using System.Xml;
 
 namespace GarageOvningUML.Garage
 {
@@ -14,7 +12,6 @@ namespace GarageOvningUML.Garage
         {
             this.ui = ui;
 
-            //this.ui.Message("Garage setup");
             var s = MakeGarage();
             GenGarage = new GenericGarage<Vehicle>(s);
         }
@@ -32,8 +29,7 @@ namespace GarageOvningUML.Garage
         public void AddVehicleByInput()
         {
 
-            //before anything... check to see if there is space left in garage
-
+            //--------before anything... check to see if there is space left in garage
 
             string color;
             int wheels;
@@ -50,16 +46,7 @@ namespace GarageOvningUML.Garage
             }
 
             //get the int value from the input
-            int typeInt= ui.InputLoopInt(ui.InputChar().ToString());
-            //---- need to check if in range...
-
-            //ui.Message(enumlen.ToString());
-            //ui.Message(VehicleTypes.Car.ToString());
-            //ui.Message(((VehicleTypes)1).ToString());
-            //ui.Message(((int)VehicleTypes.Car).ToString());
-            //var vtype = ui.EnumValidation($"Type of vehicle : ");
-
-            //ui.Message(vtype.ToString());
+            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 1, enumlen);
 
             ui.Message("Please input the following: \n");
             var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): ");
@@ -76,9 +63,6 @@ namespace GarageOvningUML.Garage
 
             Type type = null;
 
-            //if (typeInt == 0) return;
-
-            ui.Message("typeint here : " + typeInt.ToString());
             switch (typeInt)
             {
                 case 1:
@@ -100,7 +84,6 @@ namespace GarageOvningUML.Garage
 
             //don't understand dynamic, tho it looks useful...
             //dynamic carry = new Car();
-
             //var ctors = type.GetConstructors(System.Reflection.BindingFlags.Public);
 
             var obj = Activator.CreateInstance(type) as Vehicle;
@@ -110,10 +93,14 @@ namespace GarageOvningUML.Garage
 
             PropertyInfo[] propNames = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
-            foreach(var prop in propNames)
+            foreach (var prop in propNames)
             {
-                //lucky for me all properties are of int types...Not the best in long terms but for now.
-                type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
+                if(prop.GetSetMethod() != null)
+                {
+                    //not very safe to do it like this if someone would add a new public property that is not int
+                    type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
+                }
+                
             }
 
             ////get return for successful adding..

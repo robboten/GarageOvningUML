@@ -12,5 +12,6 @@ namespace GarageOvningUML.Vehicles
         Colors Color { get; set; }
         int WheelsNr { get; set; }
         string ColorStr { get; set; }
+        int ColorInt { get; set; }
     }
 }

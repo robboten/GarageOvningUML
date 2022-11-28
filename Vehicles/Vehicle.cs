@@ -39,7 +39,8 @@ namespace GarageOvningUML.Vehicles
             {
                 //how to handle this?
                 ArgumentNullException.ThrowIfNull(value, nameof(value));
-                registrationNr = value;
+
+                registrationNr = value.ToUpper();
             }
         }
         public int WheelsNr { 
@@ -47,13 +48,24 @@ namespace GarageOvningUML.Vehicles
             set; 
         }
         public Colors Color { 
-            get; 
+            get;
+            //get
+            //{
+            //    return (Colors)ColorInt;
+            //}
             set; 
         }
 
         public string ColorStr
         {
             get ;
+
+            set;
+        }
+
+        public int ColorInt
+        {
+            get;
             set;
         }
 

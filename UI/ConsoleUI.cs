@@ -66,12 +66,32 @@ namespace GarageOvningUML.UI
             return o;
         }
 
+        public int InputLoopIntRange(string message,int low, int high)
+        {
+            Message(message);
+            var str = InputLong();
+            int o;
+
+            while (true)
+            {
+                if (int.TryParse(str, out o) && o<=high && o>=low)
+                {
+                    break;
+                }
+
+                Message("\n" + message);
+                str = InputLong();
+
+            }
+            return o;
+        }
+
         public string RegNrValidation(string message)
         {
             Message(message);
             var regNr = InputLong();
 
-            while (!Regex.IsMatch(regNr, @"[A-Z]{3}\d{3}", RegexOptions.IgnoreCase)) 
+            while (!Regex.IsMatch(regNr, @"^[A-Za-z]{3}\d{3}$", RegexOptions.IgnoreCase)) 
             {
                 Message("\n" + message);
                 regNr = InputLong();
@@ -86,27 +106,20 @@ namespace GarageOvningUML.UI
             Message(message);
             var str = InputLong();
             VehicleTypes o;
-            int.TryParse(str, out int i);
+            VehicleTypes vtype;
 
-            
-
-            while (!Enum.IsDefined(typeof(VehicleTypes), i))
+            while (true)
             {
+                if(int.TryParse(str, out int i) && Enum.IsDefined(typeof(VehicleTypes), i))
+                {
+                    vtype = (VehicleTypes)i;
+                    break;
+                }
                 Message("\n" + message);
                 str = InputLong();
-                int.TryParse(str, out i);
             }
 
-            VehicleTypes vtype = (VehicleTypes)i;
             return vtype;
-        }
-
-        public bool t(string message)
-        {
-            //if (Enum.TryParse(message, out VehicleTypes o))
-            if (int.TryParse(message, out int i) && Enum.IsDefined(typeof(VehicleTypes), i))
-                return true;
-            return false;
         }
     }
 }
