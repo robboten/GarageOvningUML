@@ -7,9 +7,6 @@ var man = new Manager();
 man.Init();
 
 
-
-
-
 //Kravspecifikation
 //● Registreringsnumret är unikt
 

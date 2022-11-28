@@ -10,7 +10,6 @@ namespace GarageOvningUML.UI
             Clear();
         }
 
-
         public char InputChar()
         {
             return Console.ReadKey(true).KeyChar;
@@ -72,7 +71,7 @@ namespace GarageOvningUML.UI
             Message(message);
             var regNr = InputLong();
 
-            while (!Regex.IsMatch(regNr, @"\[A-Z]{3}\d{3}", RegexOptions.IgnoreCase)) ;
+            while (!Regex.IsMatch(regNr, @"[A-Z]{3}\d{3}", RegexOptions.IgnoreCase)) 
             {
                 Message("\n" + message);
                 regNr = InputLong();
@@ -88,6 +87,8 @@ namespace GarageOvningUML.UI
             var str = InputLong();
             VehicleTypes o;
             int.TryParse(str, out int i);
+
+            
 
             while (!Enum.IsDefined(typeof(VehicleTypes), i))
             {

@@ -42,9 +42,10 @@ namespace GarageOvningUML
             where Vehicle : Bus
         {
             return faker
-               .RuleFor(u => u.SeatsNr, f => f.Random.Int(40, 120))
+               .RuleFor(u => u.Seats, f => f.Random.Int(40, 120))
                .RuleFor(u => u.RegistrationNr, f => f.Random.Replace("???###"))
-                .RuleFor(u => u.Color, f => f.PickRandom<Colors>())
+                //.RuleFor(u => u.Color, f => f.PickRandom<Colors>())
+                .RuleFor(u=> u.ColorStr,f=>f.Commerce.Color())
                 .RuleFor(u => u.WheelsNr, f => f.Random.Even(4, 8));
         }
 
@@ -52,9 +53,10 @@ namespace GarageOvningUML
         where Vehicle : Car
         {
             return faker
-               .RuleFor(u => u.EnginesNr, f => f.Random.Int(1, 8))
+               .RuleFor(u => u.Engines, f => f.Random.Int(1, 8))
                 .RuleFor(u => u.RegistrationNr, f => f.Random.Replace("???###"))
-                .RuleFor(u => u.Color, f => f.PickRandom<Colors>())
+                .RuleFor(u => u.ColorStr, f => f.Commerce.Color())
+                //.RuleFor(u => u.Color, f => f.PickRandom<Colors>())
                 .RuleFor(u => u.WheelsNr, f => f.Random.Even(4, 8));
         }
 

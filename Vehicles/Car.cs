@@ -1,19 +1,21 @@
 ﻿using GarageOvningUML.Enums;
+using Microsoft.VisualBasic.FileIO;
 
 namespace GarageOvningUML.Vehicles
 {
     public class Car : Vehicle
     {
-        public int EnginesNr  { get; set; }
+        //I should add set checks here to safeguard agains my weird setting of them
+        public int Engines  { get; set; }
 
         public Car(string regNr, Colors color, int engNr, int wheels) : base(regNr, color, wheels)
         {
-            EnginesNr = engNr;
+            Engines = engNr;
         }
 
         public Car(string regNr, string color, int engNr, int wheels) : base(regNr, color, wheels)
         {
-            EnginesNr = engNr;
+            Engines = engNr;
         }
 
         public Car()
@@ -21,6 +23,9 @@ namespace GarageOvningUML.Vehicles
 
         }
 
-
+        public override string VehicleInfo()
+        {
+            return base.VehicleInfo() + $"Engines: {Engines}";
+        }
     }
 }

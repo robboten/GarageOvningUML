@@ -7,10 +7,10 @@ namespace GarageOvningUML
 {
     public enum VehicleTypes
     {
-        Car,
-        Bus,
-        Motorcycle,
-        Airplane,
-        Boat,
+        Car = 1,
+        Bus = 2,
+        Motorcycle = 3,
+        Airplane = 4,
+        Boat = 5,
     }
 }

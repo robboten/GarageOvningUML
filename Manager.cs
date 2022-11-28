@@ -60,20 +60,6 @@ namespace GarageOvningUML
             }
         }
 
-        //public void Add()
-        //{
-        //    ui.Clear();
-
-        //    var type = ui.InputLoop($"Type of vehicle : ");
-        //    //switch or smt for type?
-
-        //    ui.Message("Please input the following: \n");
-        //    var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): "); //validation for serial nr needed
-        //    var color = ui.InputLoop($"color: ");
-        //    var wheels = ui.InputLoopInt($"Number of wheels: ");
-
-        //    (string, string, string, int) vT = new(type, regNr, color, wheels);
-        //}
 
         public void Remove()
         {

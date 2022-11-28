@@ -11,9 +11,12 @@ namespace GarageOvningUML.Vehicles
 {
     public abstract class Vehicle : IVehicle
     {
+        //just for now, to use with bogusgen
         public Vehicle()
         {
         }
+
+        //with enums
         protected Vehicle(string RegNr, Colors color, int wheelsNr = 4)
         {
             Color = color;
@@ -21,6 +24,7 @@ namespace GarageOvningUML.Vehicles
             WheelsNr = wheelsNr;
         }
 
+        //without enums
         protected Vehicle(string RegNr, string color, int wheelsNr = 4)
         {
             ColorStr = color;
@@ -33,6 +37,7 @@ namespace GarageOvningUML.Vehicles
             get => registrationNr;
             set
             {
+                //how to handle this?
                 ArgumentNullException.ThrowIfNull(value, nameof(value));
                 registrationNr = value;
             }
@@ -50,6 +55,11 @@ namespace GarageOvningUML.Vehicles
         {
             get ;
             set;
+        }
+
+        public virtual string VehicleInfo()
+        {
+            return $"Type: {this.GetType().Name}, RegNr: {registrationNr}, Nr of wheels: {WheelsNr}, Color: {ColorStr}, ";
         }
     }
 }
