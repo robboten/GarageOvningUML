@@ -48,7 +48,7 @@ namespace GarageOvningUML
                 switch (ui.InputChar())
                 {
                     case MenuHelpers.Quit: ui.Message("\nquitting..."); return;
-                    case MenuHelpers.Add: Add(); break; //Lägga till fordon
+                    case MenuHelpers.Add: handler.AddVehicleByInput(); break; //Lägga till fordon
                     case MenuHelpers.Remove: Remove(); break; //ta bort fordon
                     case MenuHelpers.List: handler.ListAll(); break; //Lista samtliga parkerade fordon
                     case MenuHelpers.ListType: handler.ListByType(); break; //Lista fordonstyper och hur många av varje som står i garaget
@@ -60,21 +60,20 @@ namespace GarageOvningUML
             }
         }
 
-        public void Add()
-        {
-            
-            ui.Clear();
+        //public void Add()
+        //{
+        //    ui.Clear();
 
-            var type = ui.InputLoop($"Type of vehicle : ");
+        //    var type = ui.InputLoop($"Type of vehicle : ");
+        //    //switch or smt for type?
 
-            ui.Message("Please input the following: \n");
-            var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): "); //validation for serial nr needed
-            var color = ui.InputLoop($"color: ");
-            var weigth = ui.InputLoopInt($"Weigth (kg): ");
-            var wheels = ui.InputLoopInt($"Number of wheels: ");
+        //    ui.Message("Please input the following: \n");
+        //    var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): "); //validation for serial nr needed
+        //    var color = ui.InputLoop($"color: ");
+        //    var wheels = ui.InputLoopInt($"Number of wheels: ");
 
-            //handler.Search(sStr);
-        }
+        //    (string, string, string, int) vT = new(type, regNr, color, wheels);
+        //}
 
         public void Remove()
         {

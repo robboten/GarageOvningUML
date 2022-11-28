@@ -9,11 +9,6 @@ man.Init();
 
 
 
-//● Vi programmerar inte direkt mot konkreta typer så vi använder oss av Interfaces
-//för det tex IUI, IHandler, IVehicle. (Tips är att bryta ut till interface när
-//implementationen är klar om man tycker den här delen är svår
-
-//class Vehicle
 
 //Kravspecifikation
 //● Registreringsnumret är unikt
@@ -23,7 +18,6 @@ man.Init();
 //Det ska gå att:
 //● Lägga till och ta bort fordon ur garaget
 
-//● Möjlighet att populera garaget med ett antal fordon från start.
 
 //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från
 //basklassen Vehicle). Exempelvis:
@@ -31,14 +25,12 @@ man.Init();
 //○ Alla motorcyklar som är rosa och har 3 hjul.
 //○ Alla lastbilar
 //○ Alla röda fordon
+
 //● Användaren ska få feedback på att saker gått bra eller dåligt. Till exempel när vi
 //parkerat ett fordon vill vi få en bekräftelse på att fordonet är parkerat. Om det inte
 //går vill användaren få veta varför.
-//Programmet ska vara en konsol applikation med ett textbaserat användargränssnitt.
-//Från gränssnittet skall det gå att:
-//● Navigera till samtlig funktionalitet från garage via gränssnittet
+
 //● Skapa ett garage med en användar specificerad storlek
-//● Det skall gå att stänga av applikationen från gränssnittet
 //Applikationen skall fel hantera indata på ett robust sätt, så att den inte kraschar vid
 //felaktig inmatning eller användning
 

@@ -3,30 +3,35 @@
   <Class Name="GarageOvningUML.Manager">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAgAAAAAEAAAAAAAhAAAAAAAAAAgAAACAAAgAAA=</HashCode>
+      <HashCode>AAIAAAgAAAAAEAAAAAAAhAAAAAAAAAAgAAACAAAgIAA=</HashCode>
       <FileName>Manager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GarageOvningUML.UI.ConsoleUI">
-    <Position X="2.75" Y="3" Width="1.5" />
+    <Position X="2.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAYAACAAAAAAIABAAAA=</HashCode>
+      <HashCode>AAAABAAAAAAAACAAAAAAACAAAAYAACAAAAAgIABAAAA=</HashCode>
       <FileName>UI\ConsoleUI.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="GarageOvningUML.UI.Menu">
-    <Position X="0.5" Y="3.75" Width="1.5" />
+  <Class Name="GarageOvningUML.UI.Utils">
+    <Position X="0.5" Y="4" Width="1.5" />
     <NestedTypes>
-      <Class Name="GarageOvningUML.UI.Menu.MenuHelpers" Collapsed="true">
+      <Class Name="GarageOvningUML.UI.Utils.MenuHelpersVehicle" Collapsed="true">
         <TypeIdentifier>
-          <NewMemberFileName>UI\Menu.cs</NewMemberFileName>
+          <NewMemberFileName>UI\Utils.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="GarageOvningUML.UI.Utils.MenuHelpers" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI\Utils.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>UI\Menu.cs</FileName>
+      <FileName>UI\Utils.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GarageOvningUML.Vehicles.Airplane">
@@ -67,15 +72,15 @@
   <Class Name="GarageOvningUML.Vehicles.Vehicle">
     <Position X="8.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAEABAAAAAAAAAAAACAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAAAAAAEAAEABAAAAAAAAACAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>Vehicles\Vehicle.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="GarageOvningUML.Garage.Handler">
-    <Position X="5" Y="3" Width="1.5" />
+    <Position X="5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEQAAAAAAAAAAAAFAAAAAAAAAAAAAAAgAAEAAoAAA=</HashCode>
+      <HashCode>AAAEQAAAAAAAEAAAAEAAIAAAACAAAAAAAgAAEAAoAAA=</HashCode>
       <FileName>Garage\Handler.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -91,7 +96,7 @@
   <Interface Name="GarageOvningUML.Vehicles.IVehicle">
     <Position X="8.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAEABAAAAAAAAAAAACAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAEABAAAAAAAAACAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>Vehicles\IVehicle.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -105,29 +110,36 @@
   <Interface Name="GarageOvningUML.UI.IUI">
     <Position X="2.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAYAACAAAAAAIABAAAA=</HashCode>
+      <HashCode>AAAABAAAAAAAACAAAAAAACAAAAYAACAAAAAgIABAAAA=</HashCode>
       <FileName>UI\IUI.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="GarageOvningUML.Garage.IHandler">
     <Position X="5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAEAAAAAAAAAAAAAAAgAAAAAoAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAAAEAAIAAAAAAAAAAAAgAAAAAoAAA=</HashCode>
       <FileName>Garage\IHandler.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="GarageOvningUML.Enums.FuelTypes">
-    <Position X="10.75" Y="5.75" Width="1.5" />
+    <Position X="11" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAEAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Enums\FuelTypes.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="GarageOvningUML.Enums.Colors">
-    <Position X="10.75" Y="2.25" Width="1.5" />
+    <Position X="11" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAOAAAAAAAAIhAAAAAABAAABAAAAAAAAAAAADAAAAA=</HashCode>
       <FileName>Enums\Colors.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GarageOvningUML.VehicleTypes">
+    <Position X="11" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAQAAAAAIAAAAAAAAEAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>VehicleTypes.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

@@ -14,11 +14,17 @@ namespace GarageOvningUML.Vehicles
         public Vehicle()
         {
         }
-        protected Vehicle(string RegNr, Colors color, int weight, int wheelsNr = 4)
+        protected Vehicle(string RegNr, Colors color, int wheelsNr = 4)
         {
             Color = color;
             registrationNr = RegNr;
-            Weight = weight;
+            WheelsNr = wheelsNr;
+        }
+
+        protected Vehicle(string RegNr, string color, int wheelsNr = 4)
+        {
+            ColorStr = color;
+            registrationNr = RegNr;
             WheelsNr = wheelsNr;
         }
 
@@ -35,13 +41,15 @@ namespace GarageOvningUML.Vehicles
             get; 
             set; 
         }
-        public int Weight { 
-            get; 
-            set; 
-        }
         public Colors Color { 
             get; 
             set; 
+        }
+
+        public string ColorStr
+        {
+            get ;
+            set;
         }
     }
 }

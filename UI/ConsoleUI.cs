@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace GarageOvningUML.UI
 {
@@ -50,7 +46,7 @@ namespace GarageOvningUML.UI
 
             while (string.IsNullOrEmpty(input))
             {
-                Message("\n"+message);
+                Message("\n" + message);
                 input = Console.ReadLine();
             }
 
@@ -65,7 +61,7 @@ namespace GarageOvningUML.UI
 
             while (!int.TryParse(str, out o))
             {
-                Message("\n"+message);
+                Message("\n" + message);
                 str = InputLong();
             }
             return o;
@@ -76,12 +72,40 @@ namespace GarageOvningUML.UI
             Message(message);
             var regNr = InputLong();
 
-            while (!Regex.IsMatch(regNr, @"\[A-Z]{3}\d{3}", RegexOptions.IgnoreCase));
+            while (!Regex.IsMatch(regNr, @"\[A-Z]{3}\d{3}", RegexOptions.IgnoreCase)) ;
             {
                 Message("\n" + message);
                 regNr = InputLong();
             }
             return regNr;
+        }
+
+
+        //is it possible to make this generic and then pass in the type of enum?
+        public VehicleTypes EnumValidation(string message)
+        {
+            Message(message);
+            var str = InputLong();
+            VehicleTypes o;
+            int.TryParse(str, out int i);
+
+            while (!Enum.IsDefined(typeof(VehicleTypes), i))
+            {
+                Message("\n" + message);
+                str = InputLong();
+                int.TryParse(str, out i);
+            }
+
+            VehicleTypes vtype = (VehicleTypes)i;
+            return vtype;
+        }
+
+        public bool t(string message)
+        {
+            //if (Enum.TryParse(message, out VehicleTypes o))
+            if (int.TryParse(message, out int i) && Enum.IsDefined(typeof(VehicleTypes), i))
+                return true;
+            return false;
         }
     }
 }

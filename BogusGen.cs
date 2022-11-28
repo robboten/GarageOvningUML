@@ -45,8 +45,7 @@ namespace GarageOvningUML
                .RuleFor(u => u.SeatsNr, f => f.Random.Int(40, 120))
                .RuleFor(u => u.RegistrationNr, f => f.Random.Replace("???###"))
                 .RuleFor(u => u.Color, f => f.PickRandom<Colors>())
-                .RuleFor(u => u.WheelsNr, f => f.Random.Even(4, 8))
-                .RuleFor(u => u.Weight, f => f.Random.Int(1000, 20000));
+                .RuleFor(u => u.WheelsNr, f => f.Random.Even(4, 8));
         }
 
         public static Faker<Vehicle> ApplyCarRules<Vehicle>(Faker<Vehicle> faker)
@@ -56,8 +55,7 @@ namespace GarageOvningUML
                .RuleFor(u => u.EnginesNr, f => f.Random.Int(1, 8))
                 .RuleFor(u => u.RegistrationNr, f => f.Random.Replace("???###"))
                 .RuleFor(u => u.Color, f => f.PickRandom<Colors>())
-                .RuleFor(u => u.WheelsNr, f => f.Random.Even(4, 8))
-                .RuleFor(u => u.Weight, f => f.Random.Int(1000, 20000));
+                .RuleFor(u => u.WheelsNr, f => f.Random.Even(4, 8));
         }
 
         //public static Faker<T> ApplyVehicleRules<T>(this Faker<T> faker) where T : class, IVehicle

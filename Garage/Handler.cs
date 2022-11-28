@@ -1,6 +1,7 @@
 ﻿using GarageOvningUML.Enums;
 using GarageOvningUML.UI;
 using GarageOvningUML.Vehicles;
+using System.Numerics;
 
 namespace GarageOvningUML.Garage
 {
@@ -25,11 +26,27 @@ namespace GarageOvningUML.Garage
             return ui.InputLoopInt("How many parking slots would you like to have?\n");
         }
 
+
         //need a check to see if the vehicle reg exists already
-        public void AddVehicleByString(string str, bool verbose = true)
+        public void AddVehicleByInput()
         {
-            //get return for successful adding..
-            //if (GenGarage.Add(v) && verbose)
+            ui.Clear();
+
+            int enumlen = Enum.GetNames(typeof(VehicleTypes)).Length;
+            ui.Message(enumlen.ToString());
+
+            var vtype = ui.EnumValidation($"Type of vehicle : ");
+
+            ui.Message(vtype.ToString());
+            //ui.Message("Please input the following: \n");
+            //var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): "); //validation for serial nr needed
+            //var color = ui.InputLoop($"color: ");
+            //var wheels = ui.InputLoopInt($"Number of wheels: ");
+
+            //Car v= new ( regNr, color,4,wheels);
+
+            ////get return for successful adding..
+            //if (GenGarage.Add(v))
             //    ui.Message($"Succesfully added {v.RegistrationNr}\n");
             //else
             //    ui.Message($"Something went wrong trying to add {v.RegistrationNr}\n");
@@ -67,7 +84,7 @@ namespace GarageOvningUML.Garage
             ui.Message($"Listing all {GenGarage.Count()} vehicles...\n"); //always same as capacity?
             foreach (var v in GenGarage)
             {
-                ui.Message($"{v.RegistrationNr} {v.Color} {v.WheelsNr} {v.Weight}\n");
+                ui.Message($"{v.RegistrationNr} {v.Color} {v.WheelsNr} \n");
             }
             ui.Wait();
         }
@@ -105,7 +122,7 @@ namespace GarageOvningUML.Garage
             var v = GenGarage.GetArr().Where(x => String.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(),StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
             if (v != null)
             {
-                ui.Message($"Found: {v.RegistrationNr} {v.Color} {v.WheelsNr} {v.Weight}\n");
+                ui.Message($"Found: {v.RegistrationNr} {v.Color} {v.WheelsNr} \n");
                 ui.Wait();
             }
             else

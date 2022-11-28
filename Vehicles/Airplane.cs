@@ -8,7 +8,12 @@ namespace GarageOvningUML.Vehicles
 {
     public class Airplane : Vehicle
     {
-        public Airplane(string regNr, Colors color, int weight, FuelTypes fuelType, int wheels) : base(regNr, color, weight, wheels)
+        public Airplane(string regNr, Colors color, FuelTypes fuelType, int wheels) : base(regNr, color, wheels)
+        {
+            FuelType = fuelType;
+        }
+
+        public Airplane(string regNr, string color, FuelTypes fuelType, int wheels) : base(regNr, color, wheels)
         {
             FuelType = fuelType;
         }

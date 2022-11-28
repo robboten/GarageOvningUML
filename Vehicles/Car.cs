@@ -6,7 +6,12 @@ namespace GarageOvningUML.Vehicles
     {
         public int EnginesNr  { get; set; }
 
-        public Car(string regNr, Colors color, int weight, int engNr, int wheels) : base(regNr, color, weight, wheels)
+        public Car(string regNr, Colors color, int engNr, int wheels) : base(regNr, color, wheels)
+        {
+            EnginesNr = engNr;
+        }
+
+        public Car(string regNr, string color, int engNr, int wheels) : base(regNr, color, wheels)
         {
             EnginesNr = engNr;
         }
