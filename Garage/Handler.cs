@@ -218,17 +218,17 @@ namespace GarageOvningUML.Garage
             //get the properties for the inherited classes and set them
             PropertyInfo[] propNames = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
-            ui.Message("Input your search parameters, input * to not skip");
+            ui.Message("Input your search parameters, input * or just Enter to not skip");
 
             for(int i=0;i<propNames.Length;i++)
             {
-                ui.Message($"{i} : {propNames.ElementAt(i).Name}");
+                ui.Message($"{i} : {propNames.ElementAt(i).Name}: ", false);
                 searchlist.Add(propNames.ElementAt(i),ui.InputLong());
             }
 
             foreach(var l in searchlist)
             {
-                ui.Message(l.Key.Name+""+l.Value);
+                ui.Message(l.Key.Name+" : "+l.Value);
             }
 
             ui.Wait();

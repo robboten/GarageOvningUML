@@ -43,13 +43,6 @@ namespace GarageOvningUML.Vehicles
         public string ColorStr
         {
             get ;
-
-            set;
-        }
-
-        public int ColorInt
-        {
-            get;
             set;
         }
 
