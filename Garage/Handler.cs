@@ -6,14 +6,14 @@ namespace GarageOvningUML.Garage
 {
     public class Handler : IHandler
     {
-        public GenericGarage<Vehicle> GenGarage; //nullable good here? I don't want it set before init
+        public GenericGarage<IVehicle> GenGarage; //nullable good here? I don't want it set before init
         private readonly IUI ui;
         public Handler(IUI ui)
         {
             this.ui = ui;
 
             var s = MakeGarage();
-            GenGarage = new GenericGarage<Vehicle>(s);
+            GenGarage = new GenericGarage<IVehicle>(s);
         }
 
         public int MakeGarage()
@@ -25,28 +25,58 @@ namespace GarageOvningUML.Garage
         }
 
 
+        public Dictionary<string, Type> Dict()
+        {
+            var vNS = typeof(IVehicle).Namespace;
+
+            var dict = new Dictionary<string, Type>();
+            dict.Add($"{vNS}.Car", typeof(Car));
+            return dict;
+        }
+
         //need a check to see if the vehicle reg exists already
         public void AddVehicleByInput()
         {
-
-            //--------before anything... check to see if there is space left in garage
-
             string color;
             int wheels;
 
             ui.Clear();
             ui.Message("Choose one of the following types to add:\n");
 
-            //loop thru the lenght of the enum
-            int enumlen = Enum.GetNames(typeof(VehicleTypes)).Length;
 
-            for (int i = 1; i <= enumlen; i++)
+            //list of all vehicle types
+            IEnumerable<Type> VehicleClasses = AppDomain.CurrentDomain.GetAssemblies()
+                       .SelectMany(assembly => assembly.GetTypes())
+                       .Where(type => type.IsSubclassOf(typeof(Vehicle)));
+
+            int classesLen = VehicleClasses.Count();
+
+            for (int x=0; x < classesLen; x++)
             {
-                ui.Message($"{i}:{(VehicleTypes)i}\n");
+                ui.Message($"{x}:{VehicleClasses.ElementAt(x).Name}\n");
             }
 
-            //get the int value from the input
-            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 1, enumlen);
+            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 1, classesLen);
+
+            //ui.Wait();
+
+            //--------before anything... check to see if there is space left in garage
+            //ui.Message(typeof(Car).FullName);
+
+            //ui.Message(Type.GetType("GarageOvningUML.Vehicles.Car").FullName);
+
+            //ui.Message(typeof(IVehicle).Namespace);
+
+            ////loop thru the lenght of the enum
+            //int enumlen = Enum.GetNames(typeof(VehicleTypes)).Length;
+
+            //for (int i = 1; i <= enumlen; i++)
+            //{
+            //    ui.Message($"{i}:{(VehicleTypes)i}\n");
+            //}
+
+            ////get the int value from the input
+            //int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 1, enumlen);
 
             ui.Message("Please input the following: \n");
             var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): ");
@@ -61,32 +91,32 @@ namespace GarageOvningUML.Garage
             color = ui.InputLoop($"Color: ");
             wheels = ui.InputLoopInt($"Number of wheels: ");
 
-            Type type = null;
+            Type type = VehicleClasses.ElementAt(typeInt);
 
-            switch (typeInt)
-            {
-                case 1:
-                    type = typeof(Car);
-                    break;
-                case 2:
-                    type = typeof(Bus);
-                    break;
-                case 3:
-                    type = typeof(Motorcycle);
-                    break;
-                case 4:
-                    type = typeof(Airplane);
-                    break;
-                case 5:
-                    type = typeof(Boat);
-                    break;
-            }
+            //switch (typeInt)
+            //{
+            //    case (int)VehicleTypes.Car:
+            //        type = typeof(Car);
+            //        break;
+            //    case 2:
+            //        type = typeof(Bus);
+            //        break;
+            //    case 3:
+            //        type = typeof(Motorcycle);
+            //        break;
+            //    case 4:
+            //        type = typeof(Airplane);
+            //        break;
+            //    case 5:
+            //        type = typeof(Boat);
+            //        break;
+            //}
 
             //don't understand dynamic, tho it looks useful...
             //dynamic carry = new Car();
             //var ctors = type.GetConstructors(System.Reflection.BindingFlags.Public);
 
-            var obj = Activator.CreateInstance(type) as Vehicle;
+            var obj = Activator.CreateInstance(type) as IVehicle;
             obj.RegistrationNr = regNr;
             obj.WheelsNr = wheels;
             obj.ColorStr = color;
@@ -99,8 +129,7 @@ namespace GarageOvningUML.Garage
                 {
                     //not very safe to do it like this if someone would add a new public property that is not int
                     type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
-                }
-                
+                }  
             }
 
             ////get return for successful adding..
@@ -118,9 +147,12 @@ namespace GarageOvningUML.Garage
             if (GenGarage.Any(vh => vh.RegistrationNr == v.RegistrationNr))
             {
                 ui.Message($"Registration number {v.RegistrationNr} is already in use. Try again.\n");
+
                 ui.Wait();
                 return;
             }
+
+            //--- check for full garage
 
             if (GenGarage.Add(v))
             {
@@ -132,6 +164,7 @@ namespace GarageOvningUML.Garage
             }
             else
             {
+                
                 ui.Message($"Something went wrong trying to add {v.RegistrationNr}\n");
                 ui.Wait();
             }
@@ -139,7 +172,25 @@ namespace GarageOvningUML.Garage
             //make success and error handlers for ui?
         }
 
-        public void RemoveVehicle(Vehicle v)
+        public void SearchRemove(string sStr)
+        {
+            ui.Message($"Searching for vehicles...\n");
+
+            var v = GenGarage.GetArr().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
+            if (v != null)
+            {
+                ui.Message($"Found: {v.VehicleInfo()}\n");
+                RemoveVehicle(v);
+            }
+            else
+            {
+                ui.Message($"No mathing vehicles for {sStr}\n");
+                ui.Wait();
+            }
+        }
+
+        public void RemoveVehicle(IVehicle v)
         {
             //get return for successful..
             if (GenGarage.Remove(v))
@@ -157,7 +208,6 @@ namespace GarageOvningUML.Garage
 
             foreach (var v in GenGarage)
             {
-                //ui.Message($"{v.RegistrationNr} {v.Color} {v.WheelsNr} \n");
                 ui.Message(v.VehicleInfo() + "\n");
             }
             ui.Wait();
@@ -167,24 +217,6 @@ namespace GarageOvningUML.Garage
         {
             ui.Clear();
             ui.Message($"Listing types of vehicles...\n");
-
-            ////all not null
-            //var notNullList= GenGarage.GetArr().Where(x=> x != null).ToList();
-
-            ////get all types
-            //var typesList = notNullList.Select(x => x.GetType()).Distinct();
-
-            ////nr of types
-            //int nrTypes = typesList.Count();
-
-            //ui.Message($"{nrTypes} different types of vehicles in the garage.\n");
-
-            ////get amount of vehicles in each type
-            //foreach (var type in typesList)
-            //{
-            //    var eachType = GenGarage.GetArr().Where(x => x.GetType() == type).ToList();
-            //    ui.Message($"{eachType.Count} of vehicles are of the type {type.Name}\n");
-            //}    
 
             foreach (var group in GenGarage.GroupBy(v => v.GetType().Name))
             {
@@ -201,7 +233,6 @@ namespace GarageOvningUML.Garage
             var v = GenGarage.GetArr().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
             if (v != null)
             {
-                //ui.Message(v.VehicleInfo() + "\n");
                 ui.Message($"Found: {v.VehicleInfo()}\n");
                 ui.Wait();
             }

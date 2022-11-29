@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace GarageOvningUML.Garage
 {
-    public class GenericGarage<T> : IEnumerable<T> where T : Vehicle
+    public class GenericGarage<T> : IEnumerable<T> where T : IVehicle
     {
        // private readonly List<T> _items = new();
         private readonly T[] varr;
@@ -45,9 +45,9 @@ namespace GarageOvningUML.Garage
             //find right vehicle
             for (var i = 0; i < varr.Length; i++)
             {
-                if (varr[i] == item)
+                if (varr[i].Equals(item))
                 {
-                    varr[i] = null;
+                    varr[i] = default!;
                     return true;
                 }
             }
@@ -58,11 +58,8 @@ namespace GarageOvningUML.Garage
         {
             foreach (var v in varr)
             {
-                if (v == null)
-                {
-                    break;
-                }
-                yield return v;
+                if (v != null)
+                    yield return v;
             }
         }
 

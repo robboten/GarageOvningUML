@@ -8,7 +8,7 @@ namespace GarageOvningUML.UI
     public interface IUI
     {
         string InputLong();
-        void Message(string message);
+        void Message(string text, bool nl = true);
         void Clear();
         char InputChar();
         void Wait();

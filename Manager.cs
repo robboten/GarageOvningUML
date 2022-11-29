@@ -63,7 +63,10 @@ namespace GarageOvningUML
 
         public void Remove()
         {
-            throw new System.NotImplementedException();
+            ui.Clear();
+
+            var sStr = ui.InputLoop($"Input registration number for vehicle to remove: ");
+            handler.SearchRemove(sStr);
         }
 
         //Hitta ett specifikt fordon via registreringsnumret. Det ska gå fungera med både ABC123 samt Abc123 eller AbC123.

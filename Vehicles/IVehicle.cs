@@ -13,5 +13,6 @@ namespace GarageOvningUML.Vehicles
         int WheelsNr { get; set; }
         string ColorStr { get; set; }
         int ColorInt { get; set; }
+        string VehicleInfo();
     }
 }

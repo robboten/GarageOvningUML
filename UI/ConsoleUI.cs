@@ -15,9 +15,16 @@ namespace GarageOvningUML.UI
             return Console.ReadKey(true).KeyChar;
         }
 
-        public void Message(string text)
+        public void Message(string text, bool nl=true)
         {
-            Console.Write(text);
+            if (nl)
+            {
+                Console.WriteLine(text);
+            } else
+            {
+                Console.Write(text);
+            }
+            
         }
 
         public void Clear()

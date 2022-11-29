@@ -25,6 +25,8 @@ namespace GarageOvningUML.UI
             public const char Boat = '5';
         }
 
+
+
     }
 
 
