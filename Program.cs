@@ -8,13 +8,6 @@ man.Init();
 
 
 //Kravspecifikation
-//● Registreringsnumret är unikt
-
-
-//Funktionalitet
-//Det ska gå att:
-//● Lägga till och ta bort fordon ur garaget
-
 
 //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från
 //basklassen Vehicle). Exempelvis:
@@ -27,7 +20,6 @@ man.Init();
 //parkerat ett fordon vill vi få en bekräftelse på att fordonet är parkerat. Om det inte
 //går vill användaren få veta varför.
 
-//● Skapa ett garage med en användar specificerad storlek
 //Applikationen skall fel hantera indata på ett robust sätt, så att den inte kraschar vid
 //felaktig inmatning eller användning
 

@@ -13,7 +13,7 @@ namespace GarageOvningUML
         public Manager()
         {
             ui = new ConsoleUI();
-            ui.Message("Welcome to the garage!\n");
+            ui.Message("Welcome to the garage!");
 
             //not good in the constructor, but how else to set the handler before exiting it?
             handler = new Handler(ui);
@@ -35,8 +35,8 @@ namespace GarageOvningUML
             {
                 ui.Clear();
                 ui.Message("Press one of following:\n" +
-                    $"{MenuHelpers.Add} : Add vehicle \n" +
-                    $"{MenuHelpers.Remove} : Remove vehicle \n" +
+                    $"{MenuHelpers.Add} : Add vehicle\n" +
+                    $"{MenuHelpers.Remove} : Remove vehicle\n" +
                     $"{MenuHelpers.List} : List all parked vehicles\n" +
                     $"{MenuHelpers.ListType} : List the types of vehicles parked\n" +
                     $"{MenuHelpers.Search} : Search for vehicle by registration number\n" +
@@ -54,7 +54,7 @@ namespace GarageOvningUML
                     case MenuHelpers.ListType: handler.ListByType(); break; //Lista fordonstyper och hur många av varje som står i garaget
                     case MenuHelpers.Seed: handler.Seeder(); break; //Möjlighet att populera garaget med ett antal fordon från start.
                     case MenuHelpers.Search: Search(); break;
-                    case MenuHelpers.SearchProp: SearchByProp(); break;
+                    case MenuHelpers.SearchProp: handler.SearchByProp(); break;
                     default: ui.Message("\nEnter a valid command"); break;
                 }
             }
@@ -69,7 +69,6 @@ namespace GarageOvningUML
             handler.SearchRemove(sStr);
         }
 
-        //Hitta ett specifikt fordon via registreringsnumret. Det ska gå fungera med både ABC123 samt Abc123 eller AbC123.
         public void Search()
         {
             ui.Clear();
@@ -79,15 +78,7 @@ namespace GarageOvningUML
         }
 
 
-        //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från basklassen Vehicle). Exempelvis:
-        //○ Alla svarta fordon med fyra hjul.
-        //○ Alla motorcyklar som är rosa och har 3 hjul.
-        //○ Alla lastbilar
-        //○ Alla röda fordon
-        public void SearchByProp()
-        {
-            throw new System.NotImplementedException();
-        }
+
 
     }
 }

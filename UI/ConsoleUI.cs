@@ -45,6 +45,8 @@ namespace GarageOvningUML.UI
             return Console.ReadLine();
         }
 
+
+        //would like an implementation of pressing escape to abort input and get back to menu, if I have time...
         public string InputLoop(string message)
         {
             Message(message);
@@ -81,7 +83,7 @@ namespace GarageOvningUML.UI
 
             while (true)
             {
-                if (int.TryParse(str, out o) && o<=high && o>=low)
+                if (int.TryParse(str, out o) && o<high && o>low)
                 {
                     break;
                 }
@@ -106,27 +108,27 @@ namespace GarageOvningUML.UI
             return regNr;
         }
 
-
+        //could also make this into a loop that gives the menu first, then wait for input
         //is it possible to make this generic and then pass in the type of enum?
-        public VehicleTypes EnumValidation(string message)
-        {
-            Message(message);
-            var str = InputLong();
-            VehicleTypes o;
-            VehicleTypes vtype;
+        //public VehicleTypes EnumValidation(string message)
+        //{
+        //    Message(message);
+        //    var str = InputLong();
+        //    VehicleTypes o;
+        //    VehicleTypes vtype;
 
-            while (true)
-            {
-                if(int.TryParse(str, out int i) && Enum.IsDefined(typeof(VehicleTypes), i))
-                {
-                    vtype = (VehicleTypes)i;
-                    break;
-                }
-                Message("\n" + message);
-                str = InputLong();
-            }
+        //    while (true)
+        //    {
+        //        if(int.TryParse(str, out int i) && Enum.IsDefined(typeof(VehicleTypes), i))
+        //        {
+        //            vtype = (VehicleTypes)i;
+        //            break;
+        //        }
+        //        Message("\n" + message);
+        //        str = InputLong();
+        //    }
 
-            return vtype;
-        }
+        //    return vtype;
+        //}
     }
 }

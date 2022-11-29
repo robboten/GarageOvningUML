@@ -18,5 +18,6 @@ namespace GarageOvningUML.Garage
         public void Seeder();
         void AddVehicleByInput();
         void SearchRemove(string sStr);
+        void SearchByProp();
     }
 }

@@ -16,7 +16,7 @@ namespace GarageOvningUML.UI
         int InputLoopInt(string message);
 
         string RegNrValidation(string message);
-        VehicleTypes EnumValidation(string message);
+        //VehicleTypes EnumValidation(string message);
         int InputLoopIntRange(string message, int low, int high);
     }
 }

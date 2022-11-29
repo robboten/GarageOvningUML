@@ -8,77 +8,63 @@ namespace GarageOvningUML.Garage
     {
         public GenericGarage<IVehicle> GenGarage; //nullable good here? I don't want it set before init
         private readonly IUI ui;
+        readonly IEnumerable<Type> VehicleClasses;
+
         public Handler(IUI ui)
         {
             this.ui = ui;
 
             var s = MakeGarage();
             GenGarage = new GenericGarage<IVehicle>(s);
+
+            VehicleClasses = AppDomain.CurrentDomain.GetAssemblies()
+                       .SelectMany(assembly => assembly.GetTypes())
+                       .Where(type => type.IsSubclassOf(typeof(Vehicle)));
         }
 
         public int MakeGarage()
         {
             //Break this out
             //Sätta en kapacitet(antal parkeringsplatser) vid instansieringen av ett nytt garage
-            ui.Message("Setting up a new garage...\n");
-            return ui.InputLoopInt("How many parking slots would you like to have?\n");
+            ui.Message("Setting up a new garage...");
+            return ui.InputLoopInt("How many parking slots would you like to have?");
         }
-
-
-        public Dictionary<string, Type> Dict()
+        public bool CheckForFullGarage()
         {
-            var vNS = typeof(IVehicle).Namespace;
-
-            var dict = new Dictionary<string, Type>();
-            dict.Add($"{vNS}.Car", typeof(Car));
-            return dict;
+            if (GenGarage.Count() >= GenGarage.Capacity)
+            {
+                ui.Message("Sorry, the garage is already full.");
+                ui.Wait();
+                return true;
+            }
+            return false;
         }
 
-        //need a check to see if the vehicle reg exists already
+
+
         public void AddVehicleByInput()
         {
-            string color;
-            int wheels;
-
             ui.Clear();
-            ui.Message("Choose one of the following types to add:\n");
 
+            //if the garage is full, abort before going into more stuff
+            if (CheckForFullGarage()) return;
 
-            //list of all vehicle types
-            IEnumerable<Type> VehicleClasses = AppDomain.CurrentDomain.GetAssemblies()
-                       .SelectMany(assembly => assembly.GetTypes())
-                       .Where(type => type.IsSubclassOf(typeof(Vehicle)));
+            ui.Message("Choose one of the following types to add:");
 
+            //get nr of vehicle classes
             int classesLen = VehicleClasses.Count();
 
-            for (int x=0; x < classesLen; x++)
+            //make the submenu for chosing vehicle type
+            for (int i = 0; i < classesLen; i++)
             {
-                ui.Message($"{x}:{VehicleClasses.ElementAt(x).Name}\n");
+                ui.Message($"{i}:{VehicleClasses.ElementAt(i).Name}");
             }
 
-            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 1, classesLen);
+            //get user input within range of the classes
+            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 0, classesLen - 1);
 
-            //ui.Wait();
-
-            //--------before anything... check to see if there is space left in garage
-            //ui.Message(typeof(Car).FullName);
-
-            //ui.Message(Type.GetType("GarageOvningUML.Vehicles.Car").FullName);
-
-            //ui.Message(typeof(IVehicle).Namespace);
-
-            ////loop thru the lenght of the enum
-            //int enumlen = Enum.GetNames(typeof(VehicleTypes)).Length;
-
-            //for (int i = 1; i <= enumlen; i++)
-            //{
-            //    ui.Message($"{i}:{(VehicleTypes)i}\n");
-            //}
-
-            ////get the int value from the input
-            //int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 1, enumlen);
-
-            ui.Message("Please input the following: \n");
+            //now start collecting info
+            ui.Message("Please input the following:");
             var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): ");
 
             if (GenGarage.Any(vh => vh.RegistrationNr == regNr))
@@ -88,55 +74,33 @@ namespace GarageOvningUML.Garage
                 return;
             }
 
-            color = ui.InputLoop($"Color: ");
-            wheels = ui.InputLoopInt($"Number of wheels: ");
-
+            //set the type of the new object to add
             Type type = VehicleClasses.ElementAt(typeInt);
 
-            //switch (typeInt)
-            //{
-            //    case (int)VehicleTypes.Car:
-            //        type = typeof(Car);
-            //        break;
-            //    case 2:
-            //        type = typeof(Bus);
-            //        break;
-            //    case 3:
-            //        type = typeof(Motorcycle);
-            //        break;
-            //    case 4:
-            //        type = typeof(Airplane);
-            //        break;
-            //    case 5:
-            //        type = typeof(Boat);
-            //        break;
-            //}
-
-            //don't understand dynamic, tho it looks useful...
-            //dynamic carry = new Car();
-            //var ctors = type.GetConstructors(System.Reflection.BindingFlags.Public);
-
+            //make instance and set properties common for all vehicles (could make this more dynamic too I guess)
             var obj = Activator.CreateInstance(type) as IVehicle;
             obj.RegistrationNr = regNr;
-            obj.WheelsNr = wheels;
-            obj.ColorStr = color;
+            obj.WheelsNr = ui.InputLoopInt($"Number of wheels: ");
+            obj.ColorStr = ui.InputLoop($"Color: ");
 
+            //get the properties for the inherited classes and set them
             PropertyInfo[] propNames = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var prop in propNames)
             {
-                if(prop.GetSetMethod() != null)
+                if (prop.GetSetMethod() != null)
                 {
-                    //not very safe to do it like this if someone would add a new public property that is not int
-                    type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
-                }  
+                    if (prop.PropertyType == typeof(int))
+                        type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
+                    //--- add others like airplane fuel or change to int fuel
+                }
             }
 
             ////get return for successful adding..
             if (GenGarage.Add(obj))
-                ui.Message($"Succesfully added {obj.RegistrationNr}\n");
+                ui.Message($"Succesfully added {obj.VehicleInfo}");
             else
-                ui.Message($"Something went wrong trying to add {obj.RegistrationNr}\n");
+                ui.Message($"Something went wrong trying to add {obj.VehicleInfo}");
 
             ui.Wait();
             //make success and error handlers for ui?
@@ -144,71 +108,68 @@ namespace GarageOvningUML.Garage
 
         public void AddVehicle(Vehicle v, bool verbose = true)
         {
+            if (CheckForFullGarage()) return;
+
             if (GenGarage.Any(vh => vh.RegistrationNr == v.RegistrationNr))
             {
-                ui.Message($"Registration number {v.RegistrationNr} is already in use. Try again.\n");
+                ui.Message($"Registration number {v.RegistrationNr} is already in use. Try again.");
 
                 ui.Wait();
                 return;
             }
 
-            //--- check for full garage
-
             if (GenGarage.Add(v))
             {
                 if (verbose)
                 {
-                    ui.Message($"Succesfully added {v.RegistrationNr}\n");
+                    ui.Message($"Succesfully added {v.VehicleInfo}");
                     ui.Wait();
                 }
             }
             else
             {
-                
-                ui.Message($"Something went wrong trying to add {v.RegistrationNr}\n");
+                ui.Message($"Something went wrong trying to add {v.VehicleInfo}");
                 ui.Wait();
             }
 
-            //make success and error handlers for ui?
+            //make success and error handlers for ui instead of adding same things over and over?
         }
 
         public void SearchRemove(string sStr)
         {
-            ui.Message($"Searching for vehicles...\n");
+            ui.Message($"Searching for vehicles...");
 
             var v = GenGarage.GetArr().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
             if (v != null)
             {
-                ui.Message($"Found: {v.VehicleInfo()}\n");
+                ui.Message($"Found: {v.VehicleInfo()}");
                 RemoveVehicle(v);
             }
             else
             {
-                ui.Message($"No mathing vehicles for {sStr}\n");
+                ui.Message($"No mathing vehicles for {sStr}");
                 ui.Wait();
             }
         }
 
         public void RemoveVehicle(IVehicle v)
         {
-            //get return for successful..
             if (GenGarage.Remove(v))
-                ui.Message($"Succesfully removed {v.RegistrationNr}\n");
+                ui.Message($"Succesfully removed {v.VehicleInfo}");
             else
-                ui.Message($"Something went wrong trying to remove {v.RegistrationNr}\n");
+                ui.Message($"Something went wrong trying to remove {v.VehicleInfo}");
             ui.Wait();
         }
 
         public void ListAll()
         {
-
             ui.Clear();
-            ui.Message($"Listing all {GenGarage.Count()} vehicles...\n"); //always same as capacity?
+            ui.Message($"Listing all {GenGarage.Count()} vehicles...");
 
             foreach (var v in GenGarage)
             {
-                ui.Message(v.VehicleInfo() + "\n");
+                ui.Message(v.VehicleInfo());
             }
             ui.Wait();
         }
@@ -216,7 +177,7 @@ namespace GarageOvningUML.Garage
         public void ListByType()
         {
             ui.Clear();
-            ui.Message($"Listing types of vehicles...\n");
+            ui.Message($"Listing types of vehicles...");
 
             foreach (var group in GenGarage.GroupBy(v => v.GetType().Name))
             {
@@ -228,25 +189,60 @@ namespace GarageOvningUML.Garage
 
         public void Search(string sStr)
         {
-            ui.Message($"Searching for vehicles...\n");
+            ui.Message($"Searching for vehicles...");
 
             var v = GenGarage.GetArr().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
             if (v != null)
             {
-                ui.Message($"Found: {v.VehicleInfo()}\n");
+                ui.Message($"Found: {v.VehicleInfo()}");
                 ui.Wait();
             }
             else
             {
-                ui.Message($"No mathing vehicles for {sStr}\n");
+                ui.Message($"No mathing vehicles for {sStr}");
                 ui.Wait();
             }
         }
 
+        //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från basklassen Vehicle). Exempelvis:
+        //○ Alla svarta fordon med fyra hjul.
+        //○ Alla motorcyklar som är rosa och har 3 hjul.
+        //○ Alla lastbilar
+        //○ Alla röda fordon
+        public void SearchByProp()
+        {
+
+            var type = typeof(IVehicle);
+            Dictionary <PropertyInfo,string> searchlist = new ();
+
+            //get the properties for the inherited classes and set them
+            PropertyInfo[] propNames = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+
+            ui.Message("Input your search parameters, input * to not skip");
+
+            for(int i=0;i<propNames.Length;i++)
+            {
+                ui.Message($"{i} : {propNames.ElementAt(i).Name}");
+                searchlist.Add(propNames.ElementAt(i),ui.InputLong());
+            }
+
+            foreach(var l in searchlist)
+            {
+                ui.Message(l.Key.Name+""+l.Value);
+            }
+
+            ui.Wait();
+            //Search sub menu - search params = properties från IVehicle
+            //properties to search for (list to choose first)
+            //build linq
+        }
+
+
+        //limited to bus/car atm, if I have time I will add more
         public void Seeder()
         {
             ui.Clear();
-            ui.Message($"Generating {GenGarage.Capacity} vehicles...\n");
+            ui.Message($"Generating {GenGarage.Capacity} vehicles...");
             BogusGen bg = new(GenGarage.Capacity);
 
             var busses = bg.BogusBusGenerator();
