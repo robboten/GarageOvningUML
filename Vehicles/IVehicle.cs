@@ -9,7 +9,6 @@ namespace GarageOvningUML.Vehicles
     public interface IVehicle
     {
         string RegistrationNr { get; set; }
-        Colors Color { get; set; }
         int WheelsNr { get; set; }
         string ColorStr { get; set; }
         int ColorInt { get; set; }

@@ -16,14 +16,6 @@ namespace GarageOvningUML.Vehicles
         {
         }
 
-        //with enums
-        protected Vehicle(string RegNr, Colors color, int wheelsNr = 4)
-        {
-            Color = color;
-            registrationNr = RegNr;
-            WheelsNr = wheelsNr;
-        }
-
         //without enums
         protected Vehicle(string RegNr, string color, int wheelsNr = 4)
         {
@@ -45,14 +37,6 @@ namespace GarageOvningUML.Vehicles
         }
         public int WheelsNr { 
             get; 
-            set; 
-        }
-        public Colors Color { 
-            get;
-            //get
-            //{
-            //    return (Colors)ColorInt;
-            //}
             set; 
         }
 
