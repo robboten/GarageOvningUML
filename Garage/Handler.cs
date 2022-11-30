@@ -91,7 +91,7 @@ namespace GarageOvningUML.Garage
                 {
                     if (prop.PropertyType == typeof(int))
                         type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
-                    //--- add others like airplane fuel or change to int fuel
+                    //add others things with not int types if needed
                 }
             }
 
@@ -239,7 +239,6 @@ namespace GarageOvningUML.Garage
                 return;
             }
             
-
             var type = typeof(IVehicle);
             Dictionary <PropertyInfo,string> searchDict = new ();
 
@@ -250,33 +249,48 @@ namespace GarageOvningUML.Garage
 
             for (int i = 0; i < propNames.Length; i++)
             {
-                ui.Message($"{i} : {Utils.GetNiceName(propNames[i])}: ", false);
+                ui.Message($"{Utils.GetNiceName(propNames[i])}: ", false);
                 searchDict.Add(propNames.ElementAt(i), ui.InputLong());
             }
 
             List<IVehicle> searchHits=new();
+            IEnumerable<IVehicle> filteredHits = GenGarage.GetArr();
 
             foreach (var search in searchDict) {
 
                 var searchkey = search.Value.ToUpper();
                 if (searchkey!="")
                 {
+                    filteredHits = filteredHits.
+                        Where(x => Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(), searchkey));
+                    //ui.Message(filteredHits.Count().ToString());
                     //messy but running out of time to make nicer...
                     var searchhits = GenGarage.GetArr()
                         .Where(x=> Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(),searchkey));
-                    if(searchhits.Any())
+                    if (searchhits.Any())
+                    {
                         searchHits.AddRange(searchhits);
-                        //ui.Message(searchhits.First().VehicleInfo());
+                    }
                 }
             }
 
-            //for now it just outputs all hits with any of the search parameters. 
-            //I should have done a list that gets filtered with each param
-            if (searchHits.Any())
-            {
-                foreach (Vehicle hit in searchHits.Cast<Vehicle>())
+            //is it possible to do this nicer without nested ifs?
+            if (searchHits.Any() || filteredHits.Any() ) {
+                if (searchHits.Any())
                 {
-                    ui.Message(hit.VehicleInfo());
+                    ui.Message("Fuzzy search hits for any parameter:");
+                    foreach (Vehicle hit in searchHits.Cast<Vehicle>())
+                    {
+                        ui.Message(hit.VehicleInfo());
+                    }
+                }
+                if (filteredHits.Any())
+                {
+                    ui.Message("Search hits with all parameters:");
+                    foreach (Vehicle hit in filteredHits.Cast<Vehicle>().ToList())
+                    {
+                        ui.Message(hit.VehicleInfo());
+                    }
                 }
             }
             else
