@@ -10,17 +10,17 @@ namespace GarageOvningUML.Garage
         public GenericGarage<IVehicle> GenGarage = null!; //nullable good here? I don't want it set before init
         private readonly IUI ui;
         IEnumerable<Type> VehicleClasses = null!;
+        int ClassesLength = 0;
 
         Dictionary<string, PropertyInfo> VehiclePropertyDict = new Dictionary<string, PropertyInfo>();
 
         public Handler(IUI ui)
         {
             this.ui = ui;
-            MakeGarage();
-
+            Init();
         }
 
-        public void MakeGarage()
+        public void Init()
         {
             ui.Message("Setting up a new garage...");
 
@@ -32,7 +32,24 @@ namespace GarageOvningUML.Garage
                        .SelectMany(assembly => assembly.GetTypes())
                        .Where(type => type.IsSubclassOf(typeof(Vehicle)));
 
-            VehiclePropertyDict=GetClassProperties(typeof(IVehicle));
+            ClassesLength = VehicleClasses.Count();
+
+            VehiclePropertyDict = GetClassProperties(typeof(IVehicle));
+        }
+        public Dictionary<string, PropertyInfo> GetClassProperties(Type type)
+        {
+            Dictionary<string, PropertyInfo> dict = new Dictionary<string, PropertyInfo>();
+
+            var classType = type;
+            PropertyInfo[] cProps = classType.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+
+            //loop thru all vehicle properties
+            foreach (var prop in cProps)
+            {
+                if (prop.GetSetMethod() != null)
+                    dict.Add(prop.Name, classType.GetProperty(prop.Name)!);
+            }
+            return dict;
         }
         public bool CheckForFullGarage()
         {
@@ -185,40 +202,38 @@ namespace GarageOvningUML.Garage
             ui.Clear();
             if (GenGarage.Count() == 0)
             {
-                ui.Message("Garage is empty, so nothing to remove");
+                ui.Message("Garage is empty, so nothing to find");
                 ui.Wait();
                 return;
             }
 
-            var type = typeof(IVehicle);
             Dictionary<PropertyInfo, string> searchDict = new();
-
-            //get the properties for IVehicle
-            PropertyInfo[] propNames = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
             ui.Message("Input your search parameters, press Enter to skip a search parameter");
 
-            for (int i = 0; i < propNames.Length; i++)
-            {
-                ui.Message($"{Utils.GetNiceName(propNames[i])}: ", false);
-                searchDict.Add(propNames.ElementAt(i), ui.InputLong());
+            //loop thru the properties for IVehicle
+            foreach ( var prop in VehiclePropertyDict) {
+                ui.Message($"{Utils.GetNiceName(prop.Value)}");
+                searchDict.Add(prop.Value, ui.InputLong());
             }
 
+            //do the actual search
             List<IVehicle> searchHits = new();
             IEnumerable<IVehicle> filteredHits = GenGarage.GetArr();
 
+
+            //messy but running out of time to make nicer...
             foreach (var search in searchDict)
             {
-
                 var searchkey = search.Value.ToUpper();
                 if (searchkey != "")
                 {
                     filteredHits = filteredHits.
                         Where(x => Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(), searchkey));
-                    //ui.Message(filteredHits.Count().ToString());
-                    //messy but running out of time to make nicer...
+                   
                     var searchhits = GenGarage.GetArr()
                         .Where(x => Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(), searchkey));
+                    
                     if (searchhits.Any())
                     {
                         searchHits.AddRange(searchhits);
@@ -237,6 +252,9 @@ namespace GarageOvningUML.Garage
                         ui.Message(hit.VehicleInfo());
                     }
                 }
+
+                ui.Message(""); //newline
+
                 if (filteredHits.Any())
                 {
                     ui.Message("Search hits with all parameters:");
@@ -254,21 +272,6 @@ namespace GarageOvningUML.Garage
             ui.Wait();
         }
 
-        public Dictionary<string, PropertyInfo> GetClassProperties(Type type)
-        {
-           Dictionary<string,PropertyInfo> dict= new Dictionary<string,PropertyInfo>();
-
-            var classType = type;
-            PropertyInfo[] cProps = classType.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
-
-            //loop thru all vehicle properties
-            foreach (var prop in cProps)
-            {
-                if (prop.GetSetMethod() != null)
-                    dict.Add(prop.Name, classType.GetProperty(prop.Name)!);
-            }
-            return dict;
-        }
         public void AddVehicleByInput()
         {
             ui.Clear();
@@ -278,76 +281,60 @@ namespace GarageOvningUML.Garage
 
             ui.Message("Choose one of the following types to add:");
 
-            //get nr of vehicle classes
-            int classesLen = VehicleClasses.Count();
+            ///---could break this out too maybe...
 
             //make the submenu for chosing vehicle type
-            for (int i = 0; i < classesLen; i++)
+            for (int i = 0; i < ClassesLength; i++)
             {
                 ui.Message($"{i} : {VehicleClasses.ElementAt(i).Name}");
             }
 
             //get user input within range of the classes
-            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 0, classesLen);
+            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 0, ClassesLength);
 
             //set the type of the new object to add
             Type type = VehicleClasses.ElementAt(typeInt);
+
+            ///---
 
             ui.Clear();
 
             //now start collecting info
             ui.Message("Please input the following:");
-            //var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): ");
 
-            //if (GenGarage.Any(vh => vh.RegistrationNr == regNr))
-            //{
-            //    ui.Message("Registration number is already in use.");
-            //    ui.Wait();
-            //    return;
-            //}
+            //start with reg nr since we need to check if it exists first of all
+            var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): ");
 
-            //make instance and set properties common for all vehicles
-            var obj = Activator.CreateInstance(type) as IVehicle;
-
-            //loop thru all vehicle properties
-            foreach (var p in VehiclePropertyDict)
-            {
-                if (p.Key == "RegistrationNr") // I don't like this hardcoded but can't do anything with it except with new attr
-                    p.Value.SetValue(obj, ui.RegNrValidation($"{Utils.GetNiceName(p.Value)} "), null);
-                else if (p.Value.PropertyType==typeof(int)) // I don't like this hardcoded but can't do anything with it except with new attr
-                    p.Value.SetValue(obj, ui.InputLoopInt($"{Utils.GetNiceName(p.Value)} "), null);
-                else if (p.Value.PropertyType == typeof(string)) // I don't like this hardcoded but can't do anything with it except with new attr
-                    p.Value.SetValue(obj, ui.InputLoop($"{Utils.GetNiceName(p.Value)} "), null);
-            }
-
-            //get the properties for the inherited classes
-            PropertyInfo[] propNames = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
-
-            var typeDict=GetClassProperties(type);
-            foreach (var td in typeDict)
-            {
-                    if (td.Value.PropertyType == typeof(int)) 
-                        td.Value.SetValue(obj, ui.InputLoopInt($"{Utils.GetNiceName(td.Value)} "), null);
-            }
-
-            //    // and set them
-            //    foreach (var prop in propNames)
-            //{
-            //    if (prop.GetSetMethod() != null)
-            //    {
-            //        if (prop.PropertyType == typeof(int))
-            //            type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
-            //        //add others things with not int types if needed
-            //    }
-            //}
-
-            //not very nice to find out here that it was all for nothing... must think of smt better
-            //reg nr hardcoded again...
-            if (GenGarage.Any(vh => vh.RegistrationNr == obj.RegistrationNr))
+            if (GenGarage.Any(vh => vh.RegistrationNr == regNr))
             {
                 ui.Message("Registration number is already in use.");
                 ui.Wait();
                 return;
+            }
+
+            //make instance and set properties common for all vehicles
+            var obj = Activator.CreateInstance(type) as IVehicle;
+
+            // I don't like this hardcoded but can't do anything with it except with new attr
+            obj.RegistrationNr = regNr;
+
+            //loop thru all vehicle properties
+            foreach (var p in VehiclePropertyDict)
+            {
+                if (p.Key == "RegistrationNr")
+                    continue;//p.Value.SetValue(obj, ui.RegNrValidation($"{Utils.GetNiceName(p.Value)} "), null);
+                else if (p.Value.PropertyType == typeof(int)) 
+                    p.Value.SetValue(obj, ui.InputLoopInt($"{Utils.GetNiceName(p.Value)} "), null);
+                else if (p.Value.PropertyType == typeof(string)) 
+                    p.Value.SetValue(obj, ui.InputLoop($"{Utils.GetNiceName(p.Value)} "), null);
+            }
+
+            //loop thru all properties for selected inherited class
+            var typeDict = GetClassProperties(type);
+            foreach (var td in typeDict)
+            {
+                if (td.Value.PropertyType == typeof(int))
+                    td.Value.SetValue(obj, ui.InputLoopInt($"{Utils.GetNiceName(td.Value)} "), null);
             }
 
             ////get return for successful adding..
@@ -357,7 +344,7 @@ namespace GarageOvningUML.Garage
                 ui.Message($"Something went wrong trying to add {obj.VehicleInfo()}");
 
             ui.Wait();
-            //make success and error handlers for ui?
+            //make success and error handlers for ui instead of hardcoding each one?
 
         }
         //limited to bus/car atm, if I have time I will add more
