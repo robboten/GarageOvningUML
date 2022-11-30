@@ -16,15 +16,15 @@ namespace GarageOvningUML.Garage
             vehicleArray = new T[Capacity];
         }
 
-        public T[] GetArr()
-        {
-            //to get away from nullexceptions when linq loop thru it
-            return vehicleArray.Where(c => c != null).ToArray();
-        }
+        //public T[] GetArr()
+        //{
+        //    //to get away from nullexceptions when linq loop thru it
+        //    return vehicleArray.Where(c => c != null).ToArray();
+        //}
 
         public bool Add(T item)
         {         
-            //could be implemented with the first index method of arrays...
+            //could be implemented with the findindex linq, but not sure it's better...
 
             //see if there is any place left in the garage
             for (var i = 0; i < vehicleArray.Length; i++)

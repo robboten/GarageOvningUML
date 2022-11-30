@@ -17,7 +17,6 @@ namespace GarageOvningUML.Utilities
             public const char Seed = 'r';
         }
 
-
         public static string? GetNiceName(PropertyInfo propertyInfo)
         {
             NameAttribute? nameAttribute = propertyInfo.GetCustomAttribute<NameAttribute>();

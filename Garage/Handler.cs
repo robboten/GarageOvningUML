@@ -140,7 +140,7 @@ namespace GarageOvningUML.Garage
 
             ui.Message($"Searching for vehicles...");
 
-            var v = GenGarage.GetArr().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            var v = GenGarage.ToArray().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
             if (v != null)
             {
@@ -194,7 +194,7 @@ namespace GarageOvningUML.Garage
             var sStr = ui.RegNrValidation($"Input registration number to search for: ");
 
             ui.Message($"Searching for vehicles...");
-            var garageArr = GenGarage.GetArr();
+            var garageArr = GenGarage.ToArray();
 
             //--could I remove the need for hard coded Reg nr in here?
             var v = garageArr.Where(x => string.Equals(x.RegistrationNr, sStr.ToUpper())).DefaultIfEmpty(null).First();
@@ -230,8 +230,10 @@ namespace GarageOvningUML.Garage
 
             //do the actual search
             List<IVehicle> searchHits = new();
-            IEnumerable<IVehicle> filteredHits = GenGarage.GetArr();
+            IEnumerable<IVehicle> filteredHits = GenGarage.ToArray();
 
+            ui.Message("Testing!!!");
+            ui.Message(GenGarage.ToArray().Length.ToString());
 
             //messy but running out of time to make nicer...
             foreach (var search in searchDict)
@@ -242,7 +244,7 @@ namespace GarageOvningUML.Garage
                     filteredHits = filteredHits.
                         Where(x => Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(), searchkey));
 
-                    var searchhits = GenGarage.GetArr()
+                    var searchhits = GenGarage.ToArray()
                         .Where(x => Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(), searchkey));
 
                     if (searchhits.Any())
