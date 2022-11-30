@@ -17,7 +17,8 @@ namespace GarageOvningUML.Garage
 
         public T[] GetArr()
         {
-            return vehicleArray;
+            return vehicleArray.Where(c => c != null).ToArray();
+            
         }
 
         public bool Add(T item)

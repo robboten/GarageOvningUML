@@ -81,7 +81,7 @@ namespace GarageOvningUML.UI
 
             while (true)
             {
-                if (int.TryParse(str, out o) && o < high && o > low)
+                if (int.TryParse(str, out o) && o < high && o >= low)
                 {
                     break;
                 }

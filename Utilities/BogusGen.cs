@@ -9,9 +9,11 @@ namespace GarageOvningUML
         private readonly int d;
         public BogusGen(int nr)
         {
+            //this whole thing is not very clever atm.. if you have 3 slots in the garage, what happens?
             n = nr;
             d = nr > 2 ? 2 : 1;
             //var types = new string[] { "Car", "Bus", "Boat", "Motorcycle" };
+
         }
 
         public List<Bus> BogusBusGenerator()
