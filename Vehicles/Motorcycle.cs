@@ -1,17 +1,10 @@
-﻿using GarageOvningUML.Enums;
-using Microsoft.VisualBasic.FileIO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace GarageOvningUML.Vehicles
+﻿namespace GarageOvningUML.Vehicles
 {
     public class Motorcycle : Vehicle
     {
         public Motorcycle() { }
 
-        public Motorcycle(string regNr, string color, int enginesNr, int wheels) : base(regNr, color,wheels)
+        public Motorcycle(string regNr, string color, int enginesNr, int wheels) : base(regNr, color, wheels)
         {
             Engines = enginesNr;
         }
@@ -21,7 +14,6 @@ namespace GarageOvningUML.Vehicles
             get;
             set;
         }
-
 
         public override string VehicleInfo()
         {

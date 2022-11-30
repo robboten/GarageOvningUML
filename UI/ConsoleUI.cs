@@ -15,23 +15,22 @@ namespace GarageOvningUML.UI
             return Console.ReadKey(true).KeyChar;
         }
 
-        public void Message(string text, bool nl=true)
+        public void Message(string text, bool nl = true)
         {
             if (nl)
             {
                 Console.WriteLine(text);
-            } else
+            }
+            else
             {
                 Console.Write(text);
             }
-            
         }
 
         public void Clear()
         {
             Console.CursorVisible = false;
             Console.Clear();
-            //Console.SetCursorPosition(0, 0);
         }
 
         public void Wait()
@@ -57,7 +56,6 @@ namespace GarageOvningUML.UI
                 Message("\n" + message);
                 input = Console.ReadLine();
             }
-
             return input;
         }
 
@@ -75,7 +73,7 @@ namespace GarageOvningUML.UI
             return o;
         }
 
-        public int InputLoopIntRange(string message,int low, int high)
+        public int InputLoopIntRange(string message, int low, int high)
         {
             Message(message);
             var str = InputLong();
@@ -83,7 +81,7 @@ namespace GarageOvningUML.UI
 
             while (true)
             {
-                if (int.TryParse(str, out o) && o<high && o>low)
+                if (int.TryParse(str, out o) && o < high && o > low)
                 {
                     break;
                 }
@@ -100,7 +98,7 @@ namespace GarageOvningUML.UI
             Message(message);
             var regNr = InputLong();
 
-            while (!Regex.IsMatch(regNr, @"^[A-Za-z]{3}\d{3}$", RegexOptions.IgnoreCase)) 
+            while (!Regex.IsMatch(regNr, @"^[A-Za-z]{3}\d{3}$", RegexOptions.IgnoreCase))
             {
                 Message("\n" + message);
                 regNr = InputLong();

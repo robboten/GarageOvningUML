@@ -1,6 +1,4 @@
-﻿using GarageOvningUML.Enums;
-
-namespace GarageOvningUML.Vehicles
+﻿namespace GarageOvningUML.Vehicles
 {
     public class Boat : Vehicle
     {

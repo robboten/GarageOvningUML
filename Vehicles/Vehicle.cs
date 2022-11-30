@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using Bogus.DataSets;
-using GarageOvningUML.Enums;
-
-namespace GarageOvningUML.Vehicles
+﻿namespace GarageOvningUML.Vehicles
 {
     public abstract class Vehicle : IVehicle
     {
         //just for now, to use with bogusgen
-        public Vehicle()
-        {
-        }
+        public Vehicle() { }
 
-        //without enums
         protected Vehicle(string RegNr, string color, int wheelsNr = 4)
         {
             ColorStr = color;
@@ -25,10 +12,10 @@ namespace GarageOvningUML.Vehicles
             WheelsNr = wheelsNr;
         }
 
-        
         private string registrationNr;
 
-        public string RegistrationNr { 
+        public string RegistrationNr
+        {
             get => registrationNr;
             set
             {
@@ -38,16 +25,15 @@ namespace GarageOvningUML.Vehicles
                 registrationNr = value.ToUpper();
             }
         }
-
-
-        public int WheelsNr { 
-            get; 
-            set; 
+        public int WheelsNr
+        {
+            get;
+            set;
         }
-        
+
         public string ColorStr
         {
-            get ;
+            get;
             set;
         }
 

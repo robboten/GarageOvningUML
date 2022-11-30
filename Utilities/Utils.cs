@@ -26,7 +26,6 @@ namespace GarageOvningUML.Utilities
         //    public const char Boat = '5';
         //}
 
-        //shouldn't be in here, but no time left to fix...
         public static string? GetNiceName(PropertyInfo propertyInfo)
         {
             NameAttribute? nameAttribute = propertyInfo.GetCustomAttribute<NameAttribute>();
