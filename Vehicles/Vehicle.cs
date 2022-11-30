@@ -25,21 +25,25 @@
                 registrationNr = value.ToUpper();
             }
         }
+
+        //private int wheelsNr;
         public int WheelsNr
         {
             get;
             set;
         }
 
+        private string colorStr;
+
         public string ColorStr
         {
-            get;
-            set;
+            get=> colorStr;
+            set { colorStr = value.ToUpper(); }
         }
 
         public virtual string VehicleInfo()
         {
-            return $"Type: {this.GetType().Name,-12} Registration number: {registrationNr,-8} Number of wheels: {WheelsNr,-4} Color: {ColorStr,-10} ";
+            return $"Type: {GetType().Name,-12} Registration number: {registrationNr,-8} Number of wheels: {WheelsNr,-4} Color: {ColorStr,-10} ";
         }
     }
 }

@@ -100,7 +100,7 @@ namespace GarageOvningUML.UI
 
             while (!Regex.IsMatch(regNr, @"^[A-Za-z]{3}\d{3}$", RegexOptions.IgnoreCase))
             {
-                Message("\n" + message);
+                Message(message + " in the format ABC123: ") ;
                 regNr = InputLong();
             }
             return regNr;

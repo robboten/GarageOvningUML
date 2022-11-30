@@ -5,9 +5,10 @@ namespace GarageOvningUML.Garage
 {
     public class GenericGarage<T> : IEnumerable<T> where T : IVehicle
     {
-       // private readonly List<T> _items = new();
         private readonly T[] vehicleArray;
         public readonly int Capacity;
+
+        //introduce a counter for cars instead of using count() for performance
 
         public GenericGarage(int capacity)
         {
@@ -17,14 +18,14 @@ namespace GarageOvningUML.Garage
 
         public T[] GetArr()
         {
+            //to get away from nullexceptions when linq loop thru it
             return vehicleArray.Where(c => c != null).ToArray();
-            
         }
 
         public bool Add(T item)
-        {
-            // _items.Add(item);
-            
+        {         
+            //could be implemented with the first index method of arrays...
+
             //see if there is any place left in the garage
             for (var i = 0; i < vehicleArray.Length; i++)
             {
@@ -33,7 +34,6 @@ namespace GarageOvningUML.Garage
                     vehicleArray[i] = item;
                     return true;
                 }
-    
             }
             return false;
             
@@ -41,7 +41,7 @@ namespace GarageOvningUML.Garage
 
         public bool Remove(T item)
         {
-           // _items.Remove(item);
+            //could maybe do this with linq too...
 
             //find right vehicle
             for (var i = 0; i < vehicleArray.Length; i++)

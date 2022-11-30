@@ -8,6 +8,7 @@ namespace GarageOvningUML.Garage
 {
     public interface IHandler
     {
+        void MakeGarage();
         void AddVehicle(Vehicle v, bool verbose);
         void ListAll();
         void ListByType();

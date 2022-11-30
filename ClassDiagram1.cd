@@ -53,15 +53,15 @@
   <Class Name="GarageOvningUML.Vehicles.Vehicle">
     <Position X="8.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAEAAEABAAAAAAAAACAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <HashCode>AAAAAAAEAAEABAAAAIAAAACAAAAAAAAAAAAAAAAABAA=</HashCode>
       <FileName>Vehicles\Vehicle.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="GarageOvningUML.Garage.Handler">
-    <Position X="5" Y="3.5" Width="1.5" />
+    <Position X="5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEQAAAAAAAEgAAIEAAIAAAAAAAgAAgAgAAEAAoAAA=</HashCode>
+      <HashCode>AAAEQAAAAAAAEgAAIEAAIAAAAAAAgAAoAgAAEAAoAAA=</HashCode>
       <FileName>Garage\Handler.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -98,7 +98,7 @@
   <Class Name="GarageOvningUML.BogusGen">
     <Position X="0.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAGEAAAAAACAAA=</HashCode>
+      <HashCode>AABEAAAAAAAAAAACAAAAAAAAAAAAAAAGEAAAAAACEAA=</HashCode>
       <FileName>Utilities\BogusGen.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -126,7 +126,7 @@
   <Interface Name="GarageOvningUML.Garage.IHandler">
     <Position X="5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAgAAAEAAIAAAAAAAAAAgAgAAAAAoAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAgAAAEAAIAAAAAAAAAAgAgAAEAAoAAA=</HashCode>
       <FileName>Garage\IHandler.cs</FileName>
     </TypeIdentifier>
   </Interface>

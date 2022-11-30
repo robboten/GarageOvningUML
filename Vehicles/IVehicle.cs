@@ -16,6 +16,7 @@ namespace GarageOvningUML.Vehicles
 
         [Name("Color")]
         string ColorStr { get; set; }
+
         string VehicleInfo();
     }
 }

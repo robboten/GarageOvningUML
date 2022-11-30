@@ -6,36 +6,33 @@ namespace GarageOvningUML
     public class BogusGen
     {
         private readonly int n;
-        private readonly int d;
         public BogusGen(int nr)
         {
             //this whole thing is not very clever atm.. if you have 3 slots in the garage, what happens?
             n = nr;
-            d = nr > 2 ? 2 : 1;
             //var types = new string[] { "Car", "Bus", "Boat", "Motorcycle" };
-
         }
 
-        public List<Bus> BogusBusGenerator()
+        public List<Bus> BogusBusGenerator(int div)
         {
             var Busfaker = new Faker<Bus>();
             ApplyBusRules(Busfaker);
             RulesExtensions.ApplyVehicleRules(Busfaker);
 
-            var busses = Busfaker.Generate(n / d);
+            var busses = Busfaker.Generate(n / div);
 
             //Console.WriteLine(JsonConvert.SerializeObject(busses, Newtonsoft.Json.Formatting.Indented));
 
             return busses;
         }
 
-        public List<Car> BogusCarGenerator()
+        public List<Car> BogusCarGenerator(int div)
         {
             var Carfaker = new Faker<Car>();
             RulesExtensions.ApplyVehicleRules(Carfaker);
             ApplyCarRules(Carfaker);
 
-            var v = Carfaker.Generate(n / d);
+            var v = Carfaker.Generate(n / div);
 
             return v;
         }

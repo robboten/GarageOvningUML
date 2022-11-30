@@ -17,14 +17,6 @@ namespace GarageOvningUML.Utilities
             public const char Seed = 'r';
         }
 
-        //public static class MenuHelpersVehicle
-        //{
-        //    public const char Car = '1';
-        //    public const char Bus = '2';
-        //    public const char Motorcycle = '3';
-        //    public const char Airplane = '4';
-        //    public const char Boat = '5';
-        //}
 
         public static string? GetNiceName(PropertyInfo propertyInfo)
         {
