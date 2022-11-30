@@ -1,17 +1,18 @@
 ﻿using Bogus;
-using GarageOvningUML.Enums;
 using GarageOvningUML.Vehicles;
-using Newtonsoft.Json;
 
 namespace GarageOvningUML
 {
     public class BogusGen
     {
         private readonly int n;
+        private readonly int d;
         public BogusGen(int nr)
         {
             n = nr;
+            d = 3;
             //var types = new string[] { "Car", "Bus", "Boat", "Motorcycle" };
+
         }
 
         public List<Bus> BogusBusGenerator()
@@ -20,7 +21,7 @@ namespace GarageOvningUML
             ApplyBusRules(Busfaker);
             RulesExtensions.ApplyVehicleRules(Busfaker);
 
-            var busses = Busfaker.Generate(n/2);
+            var busses = Busfaker.Generate(n / d);
 
             //Console.WriteLine(JsonConvert.SerializeObject(busses, Newtonsoft.Json.Formatting.Indented));
 
@@ -33,10 +34,22 @@ namespace GarageOvningUML
             RulesExtensions.ApplyVehicleRules(Carfaker);
             ApplyCarRules(Carfaker);
 
-            var cars = Carfaker.Generate(n/2);
+            var v = Carfaker.Generate(n / d);
 
-            return cars;
+            return v;
         }
+
+        public List<Motorcycle> BogusMotorcycleGenerator()
+        {
+            var Motorcyclefaker = new Faker<Motorcycle>();
+            RulesExtensions.ApplyVehicleRules(Motorcyclefaker);
+            ApplyMotorcycleRules(Motorcyclefaker);
+
+            var v = Motorcyclefaker.Generate(n / d);
+
+            return v;
+        }
+
         public static Faker<Vehicle> ApplyBusRules<Vehicle>(Faker<Vehicle> faker) where Vehicle : Bus
         {
             return faker

@@ -7,7 +7,7 @@ namespace GarageOvningUML.Garage
 {
     public class Handler : IHandler
     {
-        public GenericGarage<IVehicle> GenGarage; //nullable good here? I don't want it set before init
+        public GenericGarage<IVehicle> GenGarage=null!; //nullable good here? I don't want it set before init
         private readonly IUI ui;
         readonly IEnumerable<Type> VehicleClasses;
 
@@ -17,7 +17,6 @@ namespace GarageOvningUML.Garage
 
             var s = MakeGarage();
             GenGarage = new GenericGarage<IVehicle>(s);
-
 
             //don't like this in the constructor, but for now...
             VehicleClasses = AppDomain.CurrentDomain.GetAssemblies()
@@ -311,6 +310,7 @@ namespace GarageOvningUML.Garage
 
             var busses = bg.BogusBusGenerator();
             var cars = bg.BogusCarGenerator();
+            var motorc = bg.BogusMotorcycleGenerator();
 
             foreach (var v in busses)
             {
@@ -318,6 +318,11 @@ namespace GarageOvningUML.Garage
             }
 
             foreach (var v in cars)
+            {
+                AddVehicle(v, false);
+            }
+
+            foreach (var v in motorc)
             {
                 AddVehicle(v, false);
             }

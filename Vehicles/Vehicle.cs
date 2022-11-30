@@ -39,7 +39,7 @@
 
         public virtual string VehicleInfo()
         {
-            return $"Type: {this.GetType().Name}, RegNr: {registrationNr}, Nr of wheels: {WheelsNr}, Color: {ColorStr}, ";
+            return $"Type: {this.GetType().Name,-12} Registration number: {registrationNr,-8} Number of wheels: {WheelsNr,-4} Color: {ColorStr,-10} ";
         }
     }
 }
