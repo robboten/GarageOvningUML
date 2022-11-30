@@ -55,11 +55,13 @@ namespace GarageOvningUML.Garage
             //make the submenu for chosing vehicle type
             for (int i = 0; i < classesLen; i++)
             {
-                ui.Message($"{i}:{VehicleClasses.ElementAt(i).Name}");
+                ui.Message($"{i} : {VehicleClasses.ElementAt(i).Name}");
             }
 
             //get user input within range of the classes
-            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 0, classesLen - 1);
+            int typeInt = ui.InputLoopIntRange("Select vehicle type: ", 0, classesLen);
+
+            ui.Clear();
 
             //now start collecting info
             ui.Message("Please input the following:");
@@ -96,9 +98,9 @@ namespace GarageOvningUML.Garage
 
             ////get return for successful adding..
             if (GenGarage.Add(obj))
-                ui.Message($"Succesfully added {obj.VehicleInfo}");
+                ui.Message($"Succesfully added:\n {obj.VehicleInfo()}");
             else
-                ui.Message($"Something went wrong trying to add {obj.VehicleInfo}");
+                ui.Message($"Something went wrong trying to add {obj.VehicleInfo() }");
 
             ui.Wait();
             //make success and error handlers for ui?
@@ -120,13 +122,13 @@ namespace GarageOvningUML.Garage
             {
                 if (verbose)
                 {
-                    ui.Message($"Succesfully added {v.VehicleInfo}");
+                    ui.Message($"Succesfully added {v.VehicleInfo()}");
                     ui.Wait();
                 }
             }
             else
             {
-                ui.Message($"Something went wrong trying to add {v.VehicleInfo}");
+                ui.Message($"Something went wrong trying to add {v.VehicleInfo()}");
                 ui.Wait();
             }
 
@@ -152,7 +154,7 @@ namespace GarageOvningUML.Garage
 
             if (v != null)
             {
-                ui.Message($"Found: {v.VehicleInfo}");
+                ui.Message($"Found: {v.VehicleInfo()}");
                 RemoveVehicle(v);
             }
             else
@@ -168,7 +170,7 @@ namespace GarageOvningUML.Garage
             if (GenGarage.Remove(v))
                 ui.Message($"Succesfully removed the vehicle");
             else
-                ui.Message($"Something went wrong trying to remove {v.VehicleInfo}");
+                ui.Message($"Something went wrong trying to remove the vehicle.");
             ui.Wait();
         }
 
@@ -213,9 +215,7 @@ namespace GarageOvningUML.Garage
 
             ui.Message($"Searching for vehicles...");
             var garageArr = GenGarage.GetArr();
-            ui.Message(garageArr.Length.ToString());
 
-            //this crashes suddenly but not sure why...
             var v = garageArr.Where(x => string.Equals(x.RegistrationNr, sStr.ToUpper())).DefaultIfEmpty(null).First();
             if (v != null)
             {
