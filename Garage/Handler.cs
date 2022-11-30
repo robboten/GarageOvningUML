@@ -32,7 +32,7 @@ namespace GarageOvningUML.Garage
                        .SelectMany(assembly => assembly.GetTypes())
                        .Where(type => type.IsSubclassOf(typeof(Vehicle)));
 
-            GetClassProperties(typeof(IVehicle), VehiclePropertyDict);
+            VehiclePropertyDict=GetClassProperties(typeof(IVehicle));
         }
         public bool CheckForFullGarage()
         {
@@ -254,9 +254,9 @@ namespace GarageOvningUML.Garage
             ui.Wait();
         }
 
-        public void GetClassProperties(Type type, Dictionary<string, PropertyInfo> dict)
+        public Dictionary<string, PropertyInfo> GetClassProperties(Type type)
         {
-           // Dictionary<string,PropertyInfo> classPropDict= new Dictionary<string,PropertyInfo>();
+           Dictionary<string,PropertyInfo> dict= new Dictionary<string,PropertyInfo>();
 
             var classType = type;
             PropertyInfo[] cProps = classType.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
@@ -267,6 +267,7 @@ namespace GarageOvningUML.Garage
                 if (prop.GetSetMethod() != null)
                     dict.Add(prop.Name, classType.GetProperty(prop.Name)!);
             }
+            return dict;
         }
         public void AddVehicleByInput()
         {
@@ -308,48 +309,37 @@ namespace GarageOvningUML.Garage
             //make instance and set properties common for all vehicles
             var obj = Activator.CreateInstance(type) as IVehicle;
 
-            PropertyInfo[] IVehicleNames = typeof(IVehicle).GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
-
-            foreach(var p in VehiclePropertyDict)
+            //loop thru all vehicle properties
+            foreach (var p in VehiclePropertyDict)
             {
                 if (p.Key == "RegistrationNr") // I don't like this hardcoded but can't do anything with it except with new attr
                     p.Value.SetValue(obj, ui.RegNrValidation($"{Utils.GetNiceName(p.Value)} "), null);
-                if (p.Value.PropertyType==typeof(int)) // I don't like this hardcoded but can't do anything with it except with new attr
+                else if (p.Value.PropertyType==typeof(int)) // I don't like this hardcoded but can't do anything with it except with new attr
                     p.Value.SetValue(obj, ui.InputLoopInt($"{Utils.GetNiceName(p.Value)} "), null);
-                if (p.Value.PropertyType == typeof(string)) // I don't like this hardcoded but can't do anything with it except with new attr
+                else if (p.Value.PropertyType == typeof(string)) // I don't like this hardcoded but can't do anything with it except with new attr
                     p.Value.SetValue(obj, ui.InputLoop($"{Utils.GetNiceName(p.Value)} "), null);
             }
-            //loop thru all vehicle properties
-            //foreach (var ivprop in IVehicleNames)
-            //{
-            //    //see if there is a set method before trying to set
-            //    if (ivprop.GetSetMethod() != null)
-            //    {
-            //        if (ivprop.Name == "RegistrationNr") // I don't like this hardcoded but can't do anything with it except with new attr
-            //            typeof(IVehicle).GetProperty(ivprop.Name).SetValue(obj, ui.RegNrValidation($"{Utils.GetNiceName(ivprop)} "), null);
-            //        else if (ivprop.PropertyType == typeof(int))
-            //            typeof(IVehicle).GetProperty(ivprop.Name).SetValue(obj, ui.InputLoopInt($"{Utils.GetNiceName(ivprop)}: "), null);
-            //        else if (ivprop.PropertyType == typeof(string))
-            //            typeof(IVehicle).GetProperty(ivprop.Name).SetValue(obj, ui.InputLoop($"{Utils.GetNiceName(ivprop)}: "), null);
-            //    }
-            //}
-            //obj.RegistrationNr = regNr;
-            //obj.WheelsNr = ui.InputLoopInt($"Number of wheels: ");
-            //obj.ColorStr = ui.InputLoop($"Color: ");
 
             //get the properties for the inherited classes
             PropertyInfo[] propNames = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
-            // and set them
-            foreach (var prop in propNames)
+            var typeDict=GetClassProperties(type);
+            foreach (var td in typeDict)
             {
-                if (prop.GetSetMethod() != null)
-                {
-                    if (prop.PropertyType == typeof(int))
-                        type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
-                    //add others things with not int types if needed
-                }
+                    if (td.Value.PropertyType == typeof(int)) 
+                        td.Value.SetValue(obj, ui.InputLoopInt($"{Utils.GetNiceName(td.Value)} "), null);
             }
+
+            //    // and set them
+            //    foreach (var prop in propNames)
+            //{
+            //    if (prop.GetSetMethod() != null)
+            //    {
+            //        if (prop.PropertyType == typeof(int))
+            //            type.GetProperty(prop.Name).SetValue(obj, ui.InputLoopInt(prop.Name + ": "), null);
+            //        //add others things with not int types if needed
+            //    }
+            //}
 
             //not very nice to find out here that it was all for nothing... must think of smt better
             //reg nr hardcoded again...
