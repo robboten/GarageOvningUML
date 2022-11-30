@@ -1,6 +1,6 @@
 ﻿using GarageOvningUML.Garage;
 using GarageOvningUML.UI;
-using static GarageOvningUML.UI.Utils;
+using static GarageOvningUML.Utilities.Utils;
 using System.Text.RegularExpressions;
 
 namespace GarageOvningUML
@@ -49,36 +49,16 @@ namespace GarageOvningUML
                 {
                     case MenuHelpers.Quit: ui.Message("\nquitting..."); return;
                     case MenuHelpers.Add: handler.AddVehicleByInput(); break; //Lägga till fordon
-                    case MenuHelpers.Remove: Remove(); break; //ta bort fordon
+                    case MenuHelpers.Remove: handler.SearchRemove(); break; //ta bort fordon
                     case MenuHelpers.List: handler.ListAll(); break; //Lista samtliga parkerade fordon
                     case MenuHelpers.ListType: handler.ListByType(); break; //Lista fordonstyper och hur många av varje som står i garaget
                     case MenuHelpers.Seed: handler.Seeder(); break; //Möjlighet att populera garaget med ett antal fordon från start.
-                    case MenuHelpers.Search: Search(); break;
+                    case MenuHelpers.Search: handler.Search(); break;
                     case MenuHelpers.SearchProp: handler.SearchByProp(); break;
                     default: ui.Message("\nEnter a valid command"); break;
                 }
             }
         }
-
-
-        public void Remove()
-        {
-            ui.Clear();
-
-            var sStr = ui.InputLoop($"Input registration number for vehicle to remove: ");
-            handler.SearchRemove(sStr);
-        }
-
-        public void Search()
-        {
-            ui.Clear();
-
-            var sStr = ui.InputLoop($"Input registration number to search for: ");
-            handler.Search(sStr);
-        }
-
-
-
 
     }
 }

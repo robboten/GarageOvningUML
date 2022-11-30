@@ -11,7 +11,7 @@ namespace GarageOvningUML
         public BogusGen(int nr)
         {
             n = nr;
-            //var types = new string[] { "Car", "Bus" };
+            //var types = new string[] { "Car", "Bus", "Boat", "Motorcycle" };
         }
 
         public List<Bus> BogusBusGenerator()

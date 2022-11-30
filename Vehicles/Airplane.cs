@@ -20,23 +20,23 @@ namespace GarageOvningUML.Vehicles
         //}
 
         public int Passengers { get; set; }
-        private int FuelInt { get;set; }
+        //private int FuelInt { get;set; }
 
-        private FuelTypes FuelEnum
-        {
-            get { return (FuelTypes)FuelInt; }
-        }
+        //private FuelTypes FuelEnum
+        //{
+        //    get { return (FuelTypes)FuelInt; }
+        //}
 
-        private FuelTypes Fuel
-        {
-            get;
-            //get
-            //{
-            //    var test = (FuelTypes)FuelInt;
-            //    return test;
-            //}
-            set;
-        }
+        //private FuelTypes Fuel
+        //{
+        //    get;
+        //    //get
+        //    //{
+        //    //    var test = (FuelTypes)FuelInt;
+        //    //    return test;
+        //    //}
+        //    set;
+        //}
 
         public override string VehicleInfo()
         {

@@ -1,4 +1,5 @@
 ﻿using GarageOvningUML.UI;
+using GarageOvningUML.Utilities;
 using GarageOvningUML.Vehicles;
 using System.Reflection;
 
@@ -17,6 +18,8 @@ namespace GarageOvningUML.Garage
             var s = MakeGarage();
             GenGarage = new GenericGarage<IVehicle>(s);
 
+
+            //don't like this in the constructor, but for now...
             VehicleClasses = AppDomain.CurrentDomain.GetAssemblies()
                        .SelectMany(assembly => assembly.GetTypes())
                        .Where(type => type.IsSubclassOf(typeof(Vehicle)));
@@ -24,8 +27,6 @@ namespace GarageOvningUML.Garage
 
         public int MakeGarage()
         {
-            //Break this out
-            //Sätta en kapacitet(antal parkeringsplatser) vid instansieringen av ett nytt garage
             ui.Message("Setting up a new garage...");
             return ui.InputLoopInt("How many parking slots would you like to have?");
         }
@@ -39,8 +40,6 @@ namespace GarageOvningUML.Garage
             }
             return false;
         }
-
-
 
         public void AddVehicleByInput()
         {
@@ -135,15 +134,26 @@ namespace GarageOvningUML.Garage
             //make success and error handlers for ui instead of adding same things over and over?
         }
 
-        public void SearchRemove(string sStr)
+        public void SearchRemove()
         {
+            ui.Clear();
+
+            if (!GenGarage.Any())
+            {
+                ui.Message("Nothing to remove");
+                ui.Wait();
+                return;
+            }
+
+            var sStr = ui.InputLoop($"Input registration number for vehicle to remove: ");
+
             ui.Message($"Searching for vehicles...");
 
             var v = GenGarage.GetArr().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
             if (v != null)
             {
-                ui.Message($"Found: {v.VehicleInfo()}");
+                ui.Message($"Found: {v.VehicleInfo}");
                 RemoveVehicle(v);
             }
             else
@@ -155,8 +165,9 @@ namespace GarageOvningUML.Garage
 
         public void RemoveVehicle(IVehicle v)
         {
+
             if (GenGarage.Remove(v))
-                ui.Message($"Succesfully removed {v.VehicleInfo}");
+                ui.Message($"Succesfully removed the vehicle");
             else
                 ui.Message($"Something went wrong trying to remove {v.VehicleInfo}");
             ui.Wait();
@@ -177,7 +188,7 @@ namespace GarageOvningUML.Garage
         public void ListByType()
         {
             ui.Clear();
-            ui.Message($"Listing types of vehicles...");
+            ui.Message($"Listing types of vehicles and their count...");
 
             foreach (var group in GenGarage.GroupBy(v => v.GetType().Name))
             {
@@ -187,8 +198,20 @@ namespace GarageOvningUML.Garage
             ui.Wait();
         }
 
-        public void Search(string sStr)
+        public void Search()
         {
+            ui.Clear();
+
+
+            if (GenGarage.Count() == 0)
+            {
+                ui.Message("Garage is empty, so nothing to remove");
+                ui.Wait();
+                return;
+            }
+
+            var sStr = ui.InputLoop($"Input registration number to search for: ");
+
             ui.Message($"Searching for vehicles...");
 
             var v = GenGarage.GetArr().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
@@ -204,37 +227,64 @@ namespace GarageOvningUML.Garage
             }
         }
 
-        //● Söka efter fordon utifrån en egenskap eller flera (alla möjliga kombinationer från basklassen Vehicle). Exempelvis:
-        //○ Alla svarta fordon med fyra hjul.
-        //○ Alla motorcyklar som är rosa och har 3 hjul.
-        //○ Alla lastbilar
-        //○ Alla röda fordon
+
+        //○ Alla lastbilar ------ forgot to implement this ... 
         public void SearchByProp()
         {
+            ui.Clear();
+            if (GenGarage.Count() == 0)
+            {
+                ui.Message("Garage is empty, so nothing to remove");
+                ui.Wait();
+                return;
+            }
+            
 
             var type = typeof(IVehicle);
-            Dictionary <PropertyInfo,string> searchlist = new ();
+            Dictionary <PropertyInfo,string> searchDict = new ();
 
             //get the properties for the inherited classes and set them
             PropertyInfo[] propNames = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
-            ui.Message("Input your search parameters, input * or just Enter to not skip");
+            ui.Message("Input your search parameters, press Enter to skip a search parameter");
 
-            for(int i=0;i<propNames.Length;i++)
+            for (int i = 0; i < propNames.Length; i++)
             {
-                ui.Message($"{i} : {propNames.ElementAt(i).Name}: ", false);
-                searchlist.Add(propNames.ElementAt(i),ui.InputLong());
+                ui.Message($"{i} : {Utils.GetNiceName(propNames[i])}: ", false);
+                searchDict.Add(propNames.ElementAt(i), ui.InputLong());
             }
 
-            foreach(var l in searchlist)
+            List<IVehicle> searchHits=new();
+
+            foreach (var search in searchDict) {
+
+                var searchkey = search.Value.ToUpper();
+                if (searchkey!="")
+                {
+                    //messy but running out of time to make nicer...
+                    var searchhits = GenGarage.GetArr()
+                        .Where(x=> Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(),searchkey));
+                    if(searchhits.Any())
+                        searchHits.AddRange(searchhits);
+                        //ui.Message(searchhits.First().VehicleInfo());
+                }
+            }
+
+            //for now it just outputs all hits with any of the search parameters. 
+            //I should have done a list that gets filtered with each param
+            if (searchHits.Any())
             {
-                ui.Message(l.Key.Name+" : "+l.Value);
+                foreach (Vehicle hit in searchHits.Cast<Vehicle>())
+                {
+                    ui.Message(hit.VehicleInfo());
+                }
+            }
+            else
+            {
+                ui.Message("No vehicles found with these properties");
             }
 
             ui.Wait();
-            //Search sub menu - search params = properties från IVehicle
-            //properties to search for (list to choose first)
-            //build linq
         }
 
 

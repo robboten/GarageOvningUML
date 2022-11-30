@@ -1,6 +1,7 @@
 ﻿using Bogus.DataSets;
+using System.Reflection;
 
-namespace GarageOvningUML.UI
+namespace GarageOvningUML.Utilities
 {
     public class Utils
     {
@@ -25,7 +26,13 @@ namespace GarageOvningUML.UI
         //    public const char Boat = '5';
         //}
 
+        //shouldn't be in here, but no time left to fix...
+        public static string? GetNiceName(PropertyInfo propertyInfo)
+        {
+            NameAttribute? nameAttribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 
+            return nameAttribute is null ? propertyInfo.Name : nameAttribute.NiceName;
+        }
 
     }
 

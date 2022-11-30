@@ -12,12 +12,10 @@ namespace GarageOvningUML.Garage
         void ListAll();
         void ListByType();
         void RemoveVehicle(IVehicle v);
-
-        /// <remarks>regnr + all properties in combination</remarks>
-        void Search(string sStr);
+        void Search();
         public void Seeder();
         void AddVehicleByInput();
-        void SearchRemove(string sStr);
+        void SearchRemove();
         void SearchByProp();
     }
 }

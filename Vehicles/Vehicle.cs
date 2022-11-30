@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Bogus.DataSets;
@@ -24,7 +25,9 @@ namespace GarageOvningUML.Vehicles
             WheelsNr = wheelsNr;
         }
 
+        
         private string registrationNr;
+
         public string RegistrationNr { 
             get => registrationNr;
             set
@@ -35,11 +38,13 @@ namespace GarageOvningUML.Vehicles
                 registrationNr = value.ToUpper();
             }
         }
+
+
         public int WheelsNr { 
             get; 
             set; 
         }
-
+        
         public string ColorStr
         {
             get ;

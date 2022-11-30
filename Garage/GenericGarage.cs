@@ -6,18 +6,18 @@ namespace GarageOvningUML.Garage
     public class GenericGarage<T> : IEnumerable<T> where T : IVehicle
     {
        // private readonly List<T> _items = new();
-        private readonly T[] varr;
+        private readonly T[] vehicleArray;
         public readonly int Capacity;
 
         public GenericGarage(int capacity)
         {
             Capacity = capacity;
-            varr = new T[Capacity];
+            vehicleArray = new T[Capacity];
         }
 
         public T[] GetArr()
         {
-            return varr;
+            return vehicleArray;
         }
 
         public bool Add(T item)
@@ -25,11 +25,11 @@ namespace GarageOvningUML.Garage
             // _items.Add(item);
             
             //see if there is any place left in the garage
-            for (var i = 0; i < varr.Length; i++)
+            for (var i = 0; i < vehicleArray.Length; i++)
             {
-                if (varr[i] == null)
+                if (vehicleArray[i] == null)
                 {
-                    varr[i] = item;
+                    vehicleArray[i] = item;
                     return true;
                 }
     
@@ -43,11 +43,11 @@ namespace GarageOvningUML.Garage
            // _items.Remove(item);
 
             //find right vehicle
-            for (var i = 0; i < varr.Length; i++)
+            for (var i = 0; i < vehicleArray.Length; i++)
             {
-                if (varr[i].Equals(item))
+                if (vehicleArray[i].Equals(item))
                 {
-                    varr[i] = default!;
+                    vehicleArray[i] = default!;
                     return true;
                 }
             }
@@ -56,7 +56,7 @@ namespace GarageOvningUML.Garage
 
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (var v in varr)
+            foreach (var v in vehicleArray)
             {
                 if (v != null)
                     yield return v;
