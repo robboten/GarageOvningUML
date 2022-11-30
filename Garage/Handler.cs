@@ -7,10 +7,11 @@ namespace GarageOvningUML.Garage
 {
     public class Handler : IHandler
     {
-        public GenericGarage<IVehicle> GenGarage = null!; //nullable good here? I don't want it set before init
-        private readonly IUI ui;
-        IEnumerable<Type> VehicleClasses = null!;
+        readonly IUI ui;
         int ClassesLength = 0;
+
+        GenericGarage<IVehicle> GenGarage = null!;
+        IEnumerable<Type> VehicleClasses = null!;
 
         Dictionary<string, PropertyInfo> VehiclePropertyDict = new Dictionary<string, PropertyInfo>();
 
@@ -32,8 +33,10 @@ namespace GarageOvningUML.Garage
                        .SelectMany(assembly => assembly.GetTypes())
                        .Where(type => type.IsSubclassOf(typeof(Vehicle)));
 
+            //count the classes for easier access
             ClassesLength = VehicleClasses.Count();
 
+            //get the properties of IVehicle
             VehiclePropertyDict = GetClassProperties(typeof(IVehicle));
         }
         public Dictionary<string, PropertyInfo> GetClassProperties(Type type)
@@ -62,19 +65,35 @@ namespace GarageOvningUML.Garage
             return false;
         }
 
+        bool IsRegNrInUse(string regNr)
+        {
+            //reg nr already in use?
+            if (GenGarage.Any(vh => vh.RegistrationNr == regNr.ToUpper()))
+            {
+                ui.Message($"Registration number {regNr} is already in use. Try again.");
+                ui.Wait();
+                return true;
+            }
+            return false;
+        }
+
+        bool IsGarageEmpty() {
+            if (!GenGarage.Any())
+            {
+                ui.Message("The garage is empty!");
+                ui.Wait();
+                return true;
+            }
+            return false;
+        }
+
         public void AddVehicle(Vehicle v, bool verbose = true)
         {
             //full garage?
             if (CheckForFullGarage()) return;
 
             //reg nr already in use?
-            if (GenGarage.Any(vh => vh.RegistrationNr == v.RegistrationNr))
-            {
-                ui.Message($"Registration number {v.RegistrationNr} is already in use. Try again.");
-
-                ui.Wait();
-                return;
-            }
+            if (IsRegNrInUse(v.RegistrationNr)) return;
 
             //if all is well add
             if (GenGarage.Add(v))
@@ -94,17 +113,21 @@ namespace GarageOvningUML.Garage
             //make success and error handlers for ui instead of adding same things over and over?
         }
 
+        public void RemoveVehicle(IVehicle v)
+        {
+
+            if (GenGarage.Remove(v))
+                ui.Message($"Succesfully removed the vehicle");
+            else
+                ui.Message($"Something went wrong trying to remove the vehicle.");
+            ui.Wait();
+        }
+
         public void SearchRemove()
         {
             ui.Clear();
 
-            //---break this out...
-            if (!GenGarage.Any())
-            {
-                ui.Message("Nothing to remove");
-                ui.Wait();
-                return;
-            }
+            if (IsGarageEmpty()) return;
 
             //output all first to make it easier to see what to remove
             ui.Message($"Listing all {GenGarage.Count()}/{GenGarage.Capacity} vehicles...");
@@ -131,19 +154,12 @@ namespace GarageOvningUML.Garage
             }
         }
 
-        public void RemoveVehicle(IVehicle v)
-        {
-
-            if (GenGarage.Remove(v))
-                ui.Message($"Succesfully removed the vehicle");
-            else
-                ui.Message($"Something went wrong trying to remove the vehicle.");
-            ui.Wait();
-        }
-
         public void ListAll()
         {
             ui.Clear();
+
+            if (IsGarageEmpty()) return;
+
             ui.Message($"Listing all {GenGarage.Count()}/{GenGarage.Capacity} vehicles...");
 
             foreach (var v in GenGarage)
@@ -156,6 +172,9 @@ namespace GarageOvningUML.Garage
         public void ListByType()
         {
             ui.Clear();
+
+            if (IsGarageEmpty()) return;
+
             ui.Message($"Listing types of vehicles and their count...");
 
             foreach (var group in GenGarage.GroupBy(v => v.GetType().Name))
@@ -170,12 +189,7 @@ namespace GarageOvningUML.Garage
         {
             ui.Clear();
 
-            if (GenGarage.Count() == 0)
-            {
-                ui.Message("Garage is empty, so nothing to remove");
-                ui.Wait();
-                return;
-            }
+            if (IsGarageEmpty()) return;
 
             var sStr = ui.RegNrValidation($"Input registration number to search for: ");
 
@@ -200,19 +214,16 @@ namespace GarageOvningUML.Garage
         public void SearchByProp()
         {
             ui.Clear();
-            if (GenGarage.Count() == 0)
-            {
-                ui.Message("Garage is empty, so nothing to find");
-                ui.Wait();
-                return;
-            }
+
+            if (IsGarageEmpty()) return;
 
             Dictionary<PropertyInfo, string> searchDict = new();
 
             ui.Message("Input your search parameters, press Enter to skip a search parameter");
 
             //loop thru the properties for IVehicle
-            foreach ( var prop in VehiclePropertyDict) {
+            foreach (var prop in VehiclePropertyDict)
+            {
                 ui.Message($"{Utils.GetNiceName(prop.Value)}");
                 searchDict.Add(prop.Value, ui.InputLong());
             }
@@ -230,10 +241,10 @@ namespace GarageOvningUML.Garage
                 {
                     filteredHits = filteredHits.
                         Where(x => Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(), searchkey));
-                   
+
                     var searchhits = GenGarage.GetArr()
                         .Where(x => Equals(x.GetType().GetProperty(search.Key.Name).GetValue(x).ToString().ToUpper(), searchkey));
-                    
+
                     if (searchhits.Any())
                     {
                         searchHits.AddRange(searchhits);
@@ -305,17 +316,16 @@ namespace GarageOvningUML.Garage
             //start with reg nr since we need to check if it exists first of all
             var regNr = ui.RegNrValidation($"Registration number (in the format ABC123): ");
 
-            if (GenGarage.Any(vh => vh.RegistrationNr == regNr))
+            //reg nr already in use?
+            if (IsRegNrInUse(regNr))
             {
-                ui.Message("Registration number is already in use.");
-                ui.Wait();
                 return;
             }
 
             //make instance and set properties common for all vehicles
             var obj = Activator.CreateInstance(type) as IVehicle;
 
-            // I don't like this hardcoded but can't do anything with it except with new attr
+            // I don't like reg nr hardcoded but can't do anything with it except with new attr
             obj.RegistrationNr = regNr;
 
             //loop thru all vehicle properties
@@ -323,9 +333,9 @@ namespace GarageOvningUML.Garage
             {
                 if (p.Key == "RegistrationNr")
                     continue;//p.Value.SetValue(obj, ui.RegNrValidation($"{Utils.GetNiceName(p.Value)} "), null);
-                else if (p.Value.PropertyType == typeof(int)) 
+                else if (p.Value.PropertyType == typeof(int))
                     p.Value.SetValue(obj, ui.InputLoopInt($"{Utils.GetNiceName(p.Value)} "), null);
-                else if (p.Value.PropertyType == typeof(string)) 
+                else if (p.Value.PropertyType == typeof(string))
                     p.Value.SetValue(obj, ui.InputLoop($"{Utils.GetNiceName(p.Value)} "), null);
             }
 
@@ -347,6 +357,7 @@ namespace GarageOvningUML.Garage
             //make success and error handlers for ui instead of hardcoding each one?
 
         }
+
         //limited to bus/car atm, if I have time I will add more
         public void Seeder()
         {
