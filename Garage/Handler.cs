@@ -7,7 +7,7 @@ namespace GarageOvningUML.Garage
 {
     public class Handler : IHandler
     {
-        public GenericGarage<IVehicle> GenGarage=null!; //nullable good here? I don't want it set before init
+        public GenericGarage<IVehicle> GenGarage; //nullable good here? I don't want it set before init
         private readonly IUI ui;
         readonly IEnumerable<Type> VehicleClasses;
 
@@ -209,11 +209,14 @@ namespace GarageOvningUML.Garage
                 return;
             }
 
-            var sStr = ui.InputLoop($"Input registration number to search for: ");
+            var sStr = ui.RegNrValidation($"Input registration number to search for: ");
 
             ui.Message($"Searching for vehicles...");
+            var garageArr = GenGarage.GetArr();
+            ui.Message(garageArr.Length.ToString());
 
-            var v = GenGarage.GetArr().Where(x => string.Equals(x.RegistrationNr.ToLower(), sStr.ToLower(), StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            //this crashes suddenly but not sure why...
+            var v = garageArr.Where(x => string.Equals(x.RegistrationNr, sStr.ToUpper())).DefaultIfEmpty(null).First();
             if (v != null)
             {
                 ui.Message($"Found: {v.VehicleInfo()}");
@@ -305,12 +308,14 @@ namespace GarageOvningUML.Garage
         public void Seeder()
         {
             ui.Clear();
-            ui.Message($"Generating {GenGarage.Capacity} vehicles...");
-            BogusGen bg = new(GenGarage.Capacity);
+            var nr=ui.InputLoopIntRange($"How many parking slots would you like to have? (min: 0 max: {GenGarage.Capacity})",0, GenGarage.Capacity+1);
+
+            ui.Message($"Generating {nr} vehicles...");
+            BogusGen bg = new(nr);
 
             var busses = bg.BogusBusGenerator();
             var cars = bg.BogusCarGenerator();
-            var motorc = bg.BogusMotorcycleGenerator();
+
 
             foreach (var v in busses)
             {
@@ -322,10 +327,11 @@ namespace GarageOvningUML.Garage
                 AddVehicle(v, false);
             }
 
-            foreach (var v in motorc)
-            {
-                AddVehicle(v, false);
-            }
+            //var motorc = bg.BogusMotorcycleGenerator();
+            //foreach (var v in motorc)
+            //{
+            //    AddVehicle(v, false);
+            //}
             ui.Wait();
         }
     }

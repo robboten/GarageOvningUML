@@ -10,9 +10,8 @@ namespace GarageOvningUML
         public BogusGen(int nr)
         {
             n = nr;
-            d = 3;
+            d = nr > 2 ? 2 : 1;
             //var types = new string[] { "Car", "Bus", "Boat", "Motorcycle" };
-
         }
 
         public List<Bus> BogusBusGenerator()
@@ -39,16 +38,16 @@ namespace GarageOvningUML
             return v;
         }
 
-        public List<Motorcycle> BogusMotorcycleGenerator()
-        {
-            var Motorcyclefaker = new Faker<Motorcycle>();
-            RulesExtensions.ApplyVehicleRules(Motorcyclefaker);
-            ApplyMotorcycleRules(Motorcyclefaker);
+        //public List<Motorcycle> BogusMotorcycleGenerator()
+        //{
+        //    var Motorcyclefaker = new Faker<Motorcycle>();
+        //    RulesExtensions.ApplyVehicleRules(Motorcyclefaker);
+        //    ApplyMotorcycleRules(Motorcyclefaker);
 
-            var v = Motorcyclefaker.Generate(n / d);
+        //    var v = Motorcyclefaker.Generate(n / d);
 
-            return v;
-        }
+        //    return v;
+        //}
 
         public static Faker<Vehicle> ApplyBusRules<Vehicle>(Faker<Vehicle> faker) where Vehicle : Bus
         {

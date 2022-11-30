@@ -1,12 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using GarageOvningUML;
+using GarageOvningUML.UI;
+
 internal class Program
 {
     
     public static void Main(string[] args)
     {
-        var man = new Manager();
+        var ui = new ConsoleUI();
+        var man = new Manager(ui);
 
         man.Init();
     }

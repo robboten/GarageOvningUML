@@ -8,11 +8,11 @@ namespace GarageOvningUML
     public class Manager
     {
         private readonly IHandler handler;
-        private readonly IUI ui;
+        private IUI ui;
 
-        public Manager()
+        public Manager(IUI ui)
         {
-            ui = new ConsoleUI();
+            this.ui = ui;
             ui.Message("Welcome to the garage!");
 
             //not good in the constructor, but how else to set the handler before exiting it?
