@@ -53,7 +53,7 @@ namespace GarageOvningUML.UI
 
             while (string.IsNullOrEmpty(input))
             {
-                Message("\n" + message);
+                Message(message);
                 input = Console.ReadLine();
             }
             return input;
@@ -67,7 +67,7 @@ namespace GarageOvningUML.UI
 
             while (!int.TryParse(str, out o))
             {
-                Message("\n" + message);
+                Message(message);
                 str = InputLong();
             }
             return o;
@@ -86,7 +86,7 @@ namespace GarageOvningUML.UI
                     break;
                 }
 
-                Message("\n" + message);
+                Message(message);
                 str = InputLong();
 
             }

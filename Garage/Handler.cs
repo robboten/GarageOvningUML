@@ -146,6 +146,14 @@ namespace GarageOvningUML.Garage
                 return;
             }
 
+            //output all first to make it easier to see what to remove
+            ui.Message($"Listing all {GenGarage.Count()}/{GenGarage.Capacity} vehicles...");
+            foreach (var vv in GenGarage)
+            {
+                ui.Message(vv.VehicleInfo());
+            }
+
+
             var sStr = ui.InputLoop($"Input registration number for vehicle to remove: ");
 
             ui.Message($"Searching for vehicles...");
@@ -177,7 +185,7 @@ namespace GarageOvningUML.Garage
         public void ListAll()
         {
             ui.Clear();
-            ui.Message($"Listing all {GenGarage.Count()} vehicles...");
+            ui.Message($"Listing all {GenGarage.Count()}/{GenGarage.Capacity} vehicles...");
 
             foreach (var v in GenGarage)
             {
