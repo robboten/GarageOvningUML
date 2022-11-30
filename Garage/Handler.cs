@@ -13,7 +13,7 @@ namespace GarageOvningUML.Garage
         GenericGarage<IVehicle> GenGarage = null!;
         IEnumerable<Type> VehicleClasses = null!;
 
-        Dictionary<string, PropertyInfo> VehiclePropertyDict = new Dictionary<string, PropertyInfo>();
+        Dictionary<string, PropertyInfo> VehiclePropertyDict = new();
 
         public Handler(IUI ui)
         {
@@ -39,7 +39,7 @@ namespace GarageOvningUML.Garage
             //get the properties of IVehicle
             VehiclePropertyDict = GetClassProperties(typeof(IVehicle));
         }
-        public Dictionary<string, PropertyInfo> GetClassProperties(Type type)
+        static Dictionary<string, PropertyInfo> GetClassProperties(Type type)
         {
             Dictionary<string, PropertyInfo> dict = new Dictionary<string, PropertyInfo>();
 
@@ -54,8 +54,9 @@ namespace GarageOvningUML.Garage
             }
             return dict;
         }
-        public bool CheckForFullGarage()
+        bool CheckForFullGarage()
         {
+            //return GenGarage.IsFull ? true : false;
             if (GenGarage.Count() >= GenGarage.Capacity)
             {
                 ui.Message("Sorry, the garage is already full.");
@@ -231,9 +232,6 @@ namespace GarageOvningUML.Garage
             //do the actual search
             List<IVehicle> searchHits = new();
             IEnumerable<IVehicle> filteredHits = GenGarage.ToArray();
-
-            ui.Message("Testing!!!");
-            ui.Message(GenGarage.ToArray().Length.ToString());
 
             //messy but running out of time to make nicer...
             foreach (var search in searchDict)

@@ -7,6 +7,7 @@ namespace GarageOvningUML.Garage
     {
         private readonly T[] vehicleArray;
         public readonly int Capacity;
+        //public bool IsFull => Count >= Capacity; //from Dim
 
         //introduce a counter for cars instead of using count() for performance
 
@@ -23,7 +24,7 @@ namespace GarageOvningUML.Garage
         //}
 
         public bool Add(T item)
-        {         
+        {
             //could be implemented with the findindex linq, but not sure it's better...
 
             //see if there is any place left in the garage
@@ -36,7 +37,6 @@ namespace GarageOvningUML.Garage
                 }
             }
             return false;
-            
         }
 
         public bool Remove(T item)
